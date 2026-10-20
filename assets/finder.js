@@ -24,8 +24,10 @@
     de: {
       colors: { alu: "Alu", white: "weiss", red: "rot", yellow: "gelb", green: "grün", blue: "blau", rosa: "rosa", pink: "pink", violet: "violett", bronze: "bronze", black: "schwarz", black_nr: "schwarz #" },
       step1: "1 · Welche Farbringe haben Sie gesehen?",
-      step1Hint: "Wählen Sie pro Bein bis zu zwei Farben. Links und rechts aus Sicht des Vogels. Die Reihenfolge oben/unten spielt keine Rolle.",
-      left: "Linkes Bein", right: "Rechtes Bein",
+      step1Hint: "Tippen Sie auf eine Ringposition und wählen Sie dann die Farbe. Links und rechts aus Sicht des Vogels. Nicht erkannte Ringe leer lassen.",
+      left: "Linkes Bein", right: "Rechtes Bein", top: "oben", bottom: "unten",
+      clearSlot: "leer / unbekannt",
+      swapped: "Keine genaue Übereinstimmung. Diese Wasseramseln passen, wenn oben und unten vertauscht sind:",
       reset: "Auswahl zurücksetzen",
       matches: n => `${n} passende Wasseramsel${n === 1 ? "" : "n"}`,
       noMatch: "Keine Wasseramsel mit dieser Kombination bekannt. Melden Sie die Beobachtung trotzdem – Ihre Farbangaben werden mitgeschickt.",
@@ -53,8 +55,10 @@
     it: {
       colors: { alu: "alu", white: "bianco", red: "rosso", yellow: "giallo", green: "verde", blue: "blu", rosa: "rosa", pink: "fucsia", violet: "viola", bronze: "bronzo", black: "nero", black_nr: "nero #" },
       step1: "1 · Quali anelli colorati ha visto?",
-      step1Hint: "Scelga fino a due colori per zampa. Sinistra e destra dal punto di vista dell’uccello. L’ordine sopra/sotto non conta.",
-      left: "Zampa sinistra", right: "Zampa destra",
+      step1Hint: "Tocchi una posizione dell’anello e scelga poi il colore. Sinistra e destra dal punto di vista dell’uccello. Lasci vuoti gli anelli non riconosciuti.",
+      left: "Zampa sinistra", right: "Zampa destra", top: "sopra", bottom: "sotto",
+      clearSlot: "vuoto / sconosciuto",
+      swapped: "Nessuna corrispondenza esatta. Questi merli acquaioli corrispondono se sopra e sotto sono invertiti:",
       reset: "Azzera selezione",
       matches: n => `${n} merl${n === 1 ? "o" : "i"} acquaiol${n === 1 ? "o" : "i"} corrispondent${n === 1 ? "e" : "i"}`,
       noMatch: "Nessun merlo acquaiolo noto con questa combinazione. Segnali comunque l’osservazione – i colori indicati verranno trasmessi.",
@@ -82,8 +86,10 @@
     fr: {
       colors: { alu: "alu", white: "blanc", red: "rouge", yellow: "jaune", green: "vert", blue: "bleu", rosa: "rose", pink: "fuchsia", violet: "violet", bronze: "bronze", black: "noir", black_nr: "noir #" },
       step1: "1 · Quelles bagues de couleur avez-vous vues ?",
-      step1Hint: "Choisissez jusqu’à deux couleurs par patte. Gauche et droite du point de vue de l’oiseau. L’ordre haut/bas n’a pas d’importance.",
-      left: "Patte gauche", right: "Patte droite",
+      step1Hint: "Touchez une position de bague, puis choisissez la couleur. Gauche et droite du point de vue de l’oiseau. Laissez vides les bagues non reconnues.",
+      left: "Patte gauche", right: "Patte droite", top: "haut", bottom: "bas",
+      clearSlot: "vide / inconnu",
+      swapped: "Aucune correspondance exacte. Ces cincles correspondent si haut et bas sont inversés :",
       reset: "Réinitialiser",
       matches: n => `${n} cincle${n === 1 ? "" : "s"} correspondant${n === 1 ? "" : "s"}`,
       noMatch: "Aucun cincle connu avec cette combinaison. Signalez quand même l’observation – les couleurs indiquées seront transmises.",
@@ -114,8 +120,10 @@
   const T = I18N[lang] || I18N.de;
 
   let birds = [];
-  let selectedLeft = [];
-  let selectedRight = [];
+  // Reported rings per position; "" = empty / not recognised
+  const SLOTS = ["L_top", "L_bottom", "R_top", "R_bottom"];
+  let rings = { L_top: "", L_bottom: "", R_top: "", R_bottom: "" };
+  let activeSlot = "L_top";
   let selectedBird = null;   // bird object or null
   let map = null;
   let marker = null;
@@ -144,9 +152,18 @@
         <h3>${T.step1}</h3>
         <p class="hint">${T.step1Hint}</p>
         <div class="legs">
-          <div><div class="leg-title">${T.left}</div><div id="left-leg" class="color-grid"></div></div>
-          <div><div class="leg-title">${T.right}</div><div id="right-leg" class="color-grid"></div></div>
+          <div>
+            <div class="leg-title">${T.left}</div>
+            <button type="button" class="ring-slot" data-slot="L_top"><span class="slot-label">${T.top}</span><span class="swatch"></span></button>
+            <button type="button" class="ring-slot" data-slot="L_bottom"><span class="slot-label">${T.bottom}</span><span class="swatch"></span></button>
+          </div>
+          <div>
+            <div class="leg-title">${T.right}</div>
+            <button type="button" class="ring-slot" data-slot="R_top"><span class="slot-label">${T.top}</span><span class="swatch"></span></button>
+            <button type="button" class="ring-slot" data-slot="R_bottom"><span class="slot-label">${T.bottom}</span><span class="swatch"></span></button>
+          </div>
         </div>
+        <div id="palette" class="color-grid" style="margin-top:.8rem"></div>
         <p style="margin-top:.6rem"><button type="button" class="btn btn-sm btn-outline-secondary" id="btn-reset">${T.reset}</button></p>
         <div id="match-count" class="hint">${T.loading}</div>
         <div id="bird-list" class="bird-list"></div>
@@ -188,48 +205,84 @@
   // ----------------------------------------------------------------------
 
   function buildColorButtons() {
-    ["left", "right"].forEach(side => {
-      const el = document.getElementById(side + "-leg");
-      el.innerHTML = "";
-      COLOR_ORDER.forEach(color => {
-        const btn = document.createElement("button");
-        btn.type = "button";
-        btn.className = "color-button";
-        btn.dataset.color = color;
-        btn.textContent = T.colors[color] || color;
-        btn.style.background = COLOR_PALETTE[color];
-        btn.style.color = color === "white" || color === "rosa" ? "#000" : "#fff";
-        btn.onclick = () => toggleColor(side, color, btn);
-        el.appendChild(btn);
-      });
+    const el = document.getElementById("palette");
+    el.innerHTML = "";
+    COLOR_ORDER.forEach(color => {
+      const btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "color-button";
+      btn.textContent = T.colors[color] || color;
+      btn.style.background = COLOR_PALETTE[color];
+      btn.style.color = color === "white" || color === "rosa" ? "#000" : "#fff";
+      btn.onclick = () => setRing(color);
+      el.appendChild(btn);
     });
+
+    const clear = document.createElement("button");
+    clear.type = "button";
+    clear.className = "color-button";
+    clear.textContent = T.clearSlot;
+    clear.style.background = "#fff";
+    clear.style.color = "#333";
+    clear.onclick = () => setRing("");
+    el.appendChild(clear);
+
+    document.querySelectorAll(".ring-slot").forEach(btn => {
+      btn.onclick = () => { activeSlot = btn.dataset.slot; renderSlots(); };
+    });
+    renderSlots();
   }
 
-  function toggleColor(side, color, btn) {
-    const arr = side === "left" ? selectedLeft : selectedRight;
-    if (arr.includes(color)) {
-      arr.splice(arr.indexOf(color), 1);
-      btn.classList.remove("selected");
-    } else if (arr.length < 2) {
-      arr.push(color);
-      btn.classList.add("selected");
+  // Fill the active position, then move on to the next empty one
+  function setRing(color) {
+    rings[activeSlot] = color;
+    if (color) {
+      const next = SLOTS.find(k => !rings[k]);
+      if (next) activeSlot = next;
     }
     selectBird(null);
+    renderSlots();
     renderBirds();
   }
 
-  function birdMatches(b) {
-    const L = [b.L_top, b.L_bottom].filter(Boolean);
-    const R = [b.R_top, b.R_bottom].filter(Boolean);
-    return selectedLeft.every(c => L.includes(c)) && selectedRight.every(c => R.includes(c));
+  function renderSlots() {
+    document.querySelectorAll(".ring-slot").forEach(btn => {
+      const c = rings[btn.dataset.slot];
+      const sw = btn.querySelector(".swatch");
+      sw.textContent = c ? (T.colors[c] || c) : "?";
+      sw.style.background = c ? COLOR_PALETTE[c] : "#fff";
+      sw.style.color = c ? (c === "white" || c === "rosa" ? "#000" : "#fff") : "#999";
+      btn.classList.toggle("active", btn.dataset.slot === activeSlot);
+    });
+  }
+
+  // Exact: every reported ring sits at the same position on the bird
+  function exactMatch(b) {
+    return SLOTS.every(k => !rings[k] || b[k] === rings[k]);
+  }
+
+  // Lenient: per leg, the reported colours occur on that leg in any order
+  function swappedMatch(b) {
+    return [["L_top", "L_bottom"], ["R_top", "R_bottom"]].every(([t, u]) => {
+      const leg = [b[t], b[u]];
+      const seen = [rings[t], rings[u]].filter(Boolean);
+      return seen.every(c => leg.includes(c)) &&
+        !(seen.length === 2 && seen[0] === seen[1] && leg[0] !== leg[1]);
+    });
   }
 
   function renderBirds() {
     const list = document.getElementById("bird-list");
     const count = document.getElementById("match-count");
-    const hits = birds.filter(birdMatches);
+    let hits = birds.filter(exactMatch);
+    let label = hits.length ? T.matches(hits.length) : "";
 
-    count.textContent = hits.length ? T.matches(hits.length) : (birds.length ? T.noMatch : count.textContent);
+    if (!hits.length && SLOTS.some(k => rings[k])) {
+      hits = birds.filter(swappedMatch);
+      if (hits.length) label = T.swapped;
+    }
+
+    count.textContent = label || (birds.length ? T.noMatch : count.textContent);
 
     list.innerHTML = "";
     hits.forEach(b => {
@@ -329,13 +382,9 @@
     if (!form.checkValidity()) { form.reportValidity(); return; }
     if (!document.getElementById("f-consent").checked) return showMsg(T.needConsent, false);
 
-    const rings = selectedBird
-      ? { L_top: selectedBird.L_top, L_bottom: selectedBird.L_bottom, R_top: selectedBird.R_top, R_bottom: selectedBird.R_bottom }
-      : { L_top: selectedLeft[0] || "", L_bottom: selectedLeft[1] || "", R_top: selectedRight[0] || "", R_bottom: selectedRight[1] || "" };
-
     const payload = {
       individual_id: selectedBird ? selectedBird.id : null,
-      rings,
+      rings: { ...rings },
       date: val("f-date"),
       time: val("f-time"),
       count: val("f-count"),
@@ -386,9 +435,9 @@
     loadBirds();
 
     document.getElementById("btn-reset").onclick = () => {
-      selectedLeft = [];
-      selectedRight = [];
-      document.querySelectorAll(".color-button.selected").forEach(b => b.classList.remove("selected"));
+      rings = { L_top: "", L_bottom: "", R_top: "", R_bottom: "" };
+      activeSlot = "L_top";
+      renderSlots();
       selectBird(null);
       renderBirds();
     };

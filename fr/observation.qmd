@@ -11,7 +11,7 @@ Vous avez vu un cincle plongeur le long du Spöl ou d’un autre cours d’eau e
 ::: {.callout-tip collapse="true"}
 ## Conseils pour lire les bagues
 - **Gauche et droite du point de vue de l’oiseau :** si le cincle vous fait face, sa patte gauche est à votre droite.
-- Chaque patte porte au maximum deux bagues. La bague en aluminium (« alu ») est gris argent.
+- Chaque patte porte deux bagues, une en haut et une en bas. Faites attention à l’ordre. La bague en aluminium (« alu ») est gris argent.
 - Pas sûr·e ? Choisissez uniquement les couleurs reconnues avec certitude et notez le reste dans la remarque.
 - Les cincles sans bagues sont aussi intéressants : signalez-les quand même !
 :::

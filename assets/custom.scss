@@ -62,6 +62,19 @@ $navbar-bg: #2f5d62;
 }
 .color-button.selected { outline: 3px solid #111; outline-offset: 1px; }
 
+.ring-slot {
+  display: flex; align-items: center; justify-content: space-between; gap: .5rem;
+  width: 100%; max-width: 260px; margin-bottom: .4rem;
+  background: #fff; border: 2px solid #dde5e3; border-radius: .5rem;
+  padding: .35rem .5rem; cursor: pointer;
+}
+.ring-slot.active { border-color: $primary; box-shadow: 0 0 0 2px $primary; }
+.ring-slot .slot-label { font-size: .85rem; color: #555; }
+.ring-slot .swatch {
+  min-width: 5.5rem; text-align: center; font-weight: 600; font-size: .8rem;
+  border: 1px solid rgba(0,0,0,.2); border-radius: .3rem; padding: .25rem .4rem;
+}
+
 .bird-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; margin-top: .8rem; }
 .bird-card {
   border: 2px solid #dde5e3; border-radius: .5rem; background: #fff;
