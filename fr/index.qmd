@@ -47,6 +47,15 @@ L’assainissement modifie en outre fortement l’habitat : le lit du torrent es
 
 Les cincles du Spöl portent une combinaison individuelle de **bagues de couleur**. Elle permet de reconnaître chaque oiseau aux jumelles, sans devoir le recapturer. Chaque individu porte un nom. Chaque lecture nous indique qu’un oiseau précis vit à un endroit précis.
 
+## Comment s’appelle ce cincle ? {#name-finden}
+
+Vous avez lu les bagues de couleur d’un cincle ? Choisissez-les ici et découvrez comment s’appelle l’oiseau.
+
+```{=html}
+<div id="dipper-finder" data-mode="lookup"></div>
+<script src="../assets/finder.js"></script>
+```
+
 ## Comment participer
 
 ::: {.steps}

@@ -50,7 +50,8 @@
       err: "Senden fehlgeschlagen. Bitte versuchen Sie es später nochmals.",
       needPos: "Bitte setzen Sie den Beobachtungsort auf der Karte.",
       needConsent: "Bitte bestätigen Sie die Einwilligung.",
-      geoErr: "Standort konnte nicht ermittelt werden."
+      geoErr: "Standort konnte nicht ermittelt werden.",
+      reportThis: "Diese Beobachtung melden →", reportPage: "beobachtung.html"
     },
     it: {
       colors: { alu: "alu", white: "bianco", red: "rosso", yellow: "giallo", green: "verde", blue: "blu", rosa: "rosa", pink: "fucsia", violet: "viola", bronze: "bronzo", black: "nero", black_nr: "nero #" },
@@ -81,7 +82,8 @@
       err: "Invio non riuscito. La preghiamo di riprovare più tardi.",
       needPos: "Indichi il luogo dell’osservazione sulla carta.",
       needConsent: "La preghiamo di confermare il consenso.",
-      geoErr: "Impossibile determinare la posizione."
+      geoErr: "Impossibile determinare la posizione.",
+      reportThis: "Segnalare questa osservazione →", reportPage: "osservazione.html"
     },
     fr: {
       colors: { alu: "alu", white: "blanc", red: "rouge", yellow: "jaune", green: "vert", blue: "bleu", rosa: "rose", pink: "fuchsia", violet: "violet", bronze: "bronze", black: "noir", black_nr: "noir #" },
@@ -112,7 +114,8 @@
       err: "L’envoi a échoué. Veuillez réessayer plus tard.",
       needPos: "Veuillez indiquer le lieu d’observation sur la carte.",
       needConsent: "Veuillez confirmer votre consentement.",
-      geoErr: "Impossible de déterminer votre position."
+      geoErr: "Impossible de déterminer votre position.",
+      reportThis: "Signaler cette observation →", reportPage: "observation.html"
     }
   };
 
@@ -128,6 +131,7 @@
   let map = null;
   let marker = null;
   let position = null;       // [lat, lon]
+  let pendingBirdId = null;  // bird chosen on the project page (?b=)
 
   const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;" }[c]));
 
@@ -141,7 +145,8 @@
   // UI SKELETON
   // ----------------------------------------------------------------------
 
-  function buildUI(root) {
+  // lookup = only the ring finder (project page), otherwise finder + report form
+  function buildUI(root, lookup) {
     const today = new Date();
     const pad = n => String(n).padStart(2, "0");
     const dateStr = `${today.getFullYear()}-${pad(today.getMonth() + 1)}-${pad(today.getDate())}`;
@@ -149,7 +154,7 @@
 
     root.innerHTML = `
       <div class="finder-step">
-        <h3>${T.step1}</h3>
+        <h3>${lookup ? T.step1.replace(/^1 · /, "") : T.step1}</h3>
         <p class="hint">${T.step1Hint}</p>
         <div class="legs">
           <div>
@@ -168,8 +173,9 @@
         <div id="match-count" class="hint">${T.loading}</div>
         <div id="bird-list" class="bird-list"></div>
         <div id="selected-bird" class="selected-bird"></div>
+        ${lookup ? `<p style="margin-top:1rem"><a class="cta" id="btn-report" href="${T.reportPage}">${T.reportThis}</a></p>` : ""}
       </div>
-
+      ${lookup ? "" : `
       <form id="obs-form" novalidate>
         <div class="finder-step">
           <h3>${T.step2}</h3>
@@ -197,7 +203,7 @@
           <p style="margin-top:1rem"><button type="submit" class="cta" id="btn-submit" style="border:0">${T.submit}</button></p>
           <div id="form-msg"></div>
         </div>
-      </form>`;
+      </form>`}`;
   }
 
   // ----------------------------------------------------------------------
@@ -245,7 +251,26 @@
     renderBirds();
   }
 
+  function updateReportLink() {
+    const a = document.getElementById("btn-report");
+    if (!a) return;
+    const q = new URLSearchParams({ r: SLOTS.map(k => rings[k]).join(",") });
+    if (selectedBird) q.set("b", selectedBird.id);
+    a.href = `${T.reportPage}?${q}`;
+  }
+
+  // Take over rings and bird chosen on the project page
+  function readUrlChoice() {
+    const q = new URLSearchParams(location.search);
+    const r = (q.get("r") || "").split(",");
+    SLOTS.forEach((k, i) => { if (COLOR_PALETTE[r[i]]) rings[k] = r[i]; });
+    const next = SLOTS.find(k => !rings[k]);
+    if (next) activeSlot = next;
+    if (q.get("b")) pendingBirdId = q.get("b");
+  }
+
   function renderSlots() {
+    updateReportLink();
     document.querySelectorAll(".ring-slot").forEach(btn => {
       const c = rings[btn.dataset.slot];
       const sw = btn.querySelector(".swatch");
@@ -309,6 +334,7 @@
 
   function selectBird(b) {
     selectedBird = b;
+    updateReportLink();
     document.getElementById("selected-bird").innerHTML =
       `${T.chosen} ${b ? esc(b.name) : T.none}`;
   }
@@ -318,6 +344,10 @@
       const r = await fetch(API_BASE + "/api/public-birds");
       if (!r.ok) throw new Error(r.status);
       birds = await r.json();
+      if (pendingBirdId) {
+        selectBird(birds.find(b => String(b.id) === pendingBirdId) || null);
+        pendingBirdId = null;
+      }
       renderBirds();
     } catch (err) {
       console.error("Birds could not be loaded:", err);
@@ -428,10 +458,13 @@
     const root = document.getElementById("dipper-finder");
     if (!root) return;
 
-    buildUI(root);
+    const lookup = root.dataset.mode === "lookup";
+
+    buildUI(root, lookup);
+    if (!lookup) readUrlChoice();
     buildColorButtons();
     selectBird(null);
-    initMap();
+    if (!lookup) initMap();
     loadBirds();
 
     document.getElementById("btn-reset").onclick = () => {
@@ -441,6 +474,6 @@
       selectBird(null);
       renderBirds();
     };
-    document.getElementById("obs-form").addEventListener("submit", submit);
+    if (!lookup) document.getElementById("obs-form").addEventListener("submit", submit);
   });
 })();

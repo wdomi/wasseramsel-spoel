@@ -49,6 +49,15 @@ Die Sanierung greift zudem stark in den Lebensraum ein: Das Bachbett wird umgeba
 
 Die Wasseramseln am Spöl tragen eine individuelle Kombination aus **Farbringen**. Daran lässt sich jeder Vogel mit dem Feldstecher erkennen, ohne ihn erneut zu fangen. Jedes Individuum hat einen Namen. Jede Ablesung zeigt uns, dass ein bestimmter Vogel an einem bestimmten Ort lebt.
 
+## Wie heisst diese Wasseramsel? {#name-finden}
+
+Sie haben die Farbringe einer Wasseramsel abgelesen? Wählen Sie sie hier aus und finden Sie heraus, wie der Vogel heisst.
+
+```{=html}
+<div id="dipper-finder" data-mode="lookup"></div>
+<script src="assets/finder.js"></script>
+```
+
 ## So helfen Sie mit
 
 ::: {.steps}

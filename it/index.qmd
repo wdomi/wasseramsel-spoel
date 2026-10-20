@@ -47,6 +47,15 @@ Il risanamento incide inoltre fortemente sull’habitat: il letto del torrente v
 
 I merli acquaioli dello Spöl portano una combinazione individuale di **anelli colorati**. Grazie a questa ogni uccello può essere riconosciuto con il binocolo, senza doverlo ricatturare. Ogni individuo ha un nome. Ogni lettura ci dice che un determinato uccello vive in un determinato luogo.
 
+## Come si chiama questo merlo acquaiolo? {#name-finden}
+
+Ha letto gli anelli colorati di un merlo acquaiolo? Li scelga qui e scopra come si chiama l’uccello.
+
+```{=html}
+<div id="dipper-finder" data-mode="lookup"></div>
+<script src="../assets/finder.js"></script>
+```
+
 ## Come potete aiutarci
 
 ::: {.steps}
