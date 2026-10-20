@@ -1,0 +1,26 @@
+---
+title: "Wasseramsel melden"
+subtitle: "Farbringe ablesen – Namen finden – Beobachtung senden"
+lang: de
+---
+
+[← Zurück zum Projekt](index.qmd)
+
+Sie haben am Spöl oder an einem anderen Gewässer im Engadin eine Wasseramsel gesehen? Wählen Sie die Farbringe aus, die Sie erkannt haben. Der Finder zeigt Ihnen, welche Wasseramsel es sein könnte. Setzen Sie anschliessend den Beobachtungsort auf der Karte und senden Sie die Meldung. Sie geht direkt an die Projektleitung.
+
+::: {.callout-tip collapse="true"}
+## Tipps zum Ablesen der Ringe
+- **Links und rechts aus Sicht des Vogels:** Schaut die Wasseramsel Sie an, ist ihr linkes Bein auf Ihrer rechten Seite.
+- Jedes Bein trägt bis zu zwei Ringe. Der Aluminiumring („Alu“) ist silbergrau.
+- Unsicher? Wählen Sie nur die Farben, die Sie sicher erkannt haben, und notieren Sie den Rest in der Bemerkung.
+- Auch Wasseramseln ohne Ringe sind interessant: Bitte trotzdem melden!
+:::
+
+```{=html}
+<div id="dipper-finder"></div>
+<script src="assets/finder.js"></script>
+```
+
+::: {.sources}
+Ihre Angaben werden nur für das Wasseramsel-Projekt verwendet und nicht veröffentlicht. Kartengrundlage © swisstopo.
+:::

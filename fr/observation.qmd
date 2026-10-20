@@ -1,0 +1,26 @@
+---
+title: "Signaler un cincle plongeur"
+subtitle: "Lire les bagues – trouver le nom – envoyer l’observation"
+lang: fr
+---
+
+[← Retour au projet](index.qmd)
+
+Vous avez vu un cincle plongeur le long du Spöl ou d’un autre cours d’eau en Engadine ? Choisissez les bagues de couleur que vous avez reconnues. Le finder vous montre de quel cincle il pourrait s’agir. Placez ensuite le lieu d’observation sur la carte et envoyez le signalement. Il parvient directement à la direction du projet.
+
+::: {.callout-tip collapse="true"}
+## Conseils pour lire les bagues
+- **Gauche et droite du point de vue de l’oiseau :** si le cincle vous fait face, sa patte gauche est à votre droite.
+- Chaque patte porte au maximum deux bagues. La bague en aluminium (« alu ») est gris argent.
+- Pas sûr·e ? Choisissez uniquement les couleurs reconnues avec certitude et notez le reste dans la remarque.
+- Les cincles sans bagues sont aussi intéressants : signalez-les quand même !
+:::
+
+```{=html}
+<div id="dipper-finder"></div>
+<script src="../assets/finder.js"></script>
+```
+
+::: {.sources}
+Vos données sont utilisées uniquement pour le projet sur le cincle plongeur et ne sont pas publiées. Fond de carte © swisstopo.
+:::

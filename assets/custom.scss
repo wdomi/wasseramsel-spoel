@@ -1,0 +1,87 @@
+/*-- scss:defaults --*/
+$primary: #2f5d62;      // Spöl-Grün
+$secondary: #6b4a3a;    // Wasseramsel-Braun
+$link-color: #2f5d62;
+$font-size-root: 17px;
+$navbar-bg: #2f5d62;
+
+/*-- scss:rules --*/
+.hero {
+  display: grid;
+  grid-template-columns: 1fr 260px;
+  gap: 1.5rem;
+  align-items: center;
+  margin: 1rem 0 2rem;
+}
+.hero img { width: 100%; height: auto; }
+.hero .lead { font-size: 1.2rem; }
+@media (max-width: 700px) {
+  .hero { grid-template-columns: 1fr; }
+  .hero img { max-width: 200px; margin: 0 auto; }
+}
+
+.cta {
+  display: inline-block;
+  background: $primary;
+  color: #fff !important;
+  padding: .7rem 1.2rem;
+  border-radius: .5rem;
+  font-weight: 600;
+  text-decoration: none;
+  margin: .25rem .5rem .25rem 0;
+}
+.cta:hover { filter: brightness(1.1); }
+.cta.secondary { background: $secondary; }
+
+.timeline { border-left: 3px solid $primary; margin: 1rem 0 1.5rem; padding-left: 1rem; }
+.timeline > div { margin-bottom: .9rem; }
+.timeline b { color: $primary; }
+
+.steps { display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 1rem; margin: 1rem 0; }
+.steps > div { background: #f2f6f5; border-radius: .6rem; padding: 1rem; }
+.steps .num { font-size: 1.6rem; font-weight: 700; color: $primary; }
+
+.sources { font-size: .85rem; color: #666; }
+
+/* ---------- Finder & Meldeformular ---------- */
+.finder-step { background: #f7f9f8; border: 1px solid #dde5e3; border-radius: .6rem; padding: 1rem; margin: 1rem 0; }
+.finder-step h3 { margin-top: 0; font-size: 1.15rem; }
+
+.legs { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+@media (max-width: 560px) { .legs { grid-template-columns: 1fr; } }
+.leg-title { font-weight: 600; margin-bottom: .3rem; }
+.color-grid { display: flex; flex-wrap: wrap; gap: .35rem; }
+.color-button {
+  border: 2px solid rgba(0,0,0,.25);
+  border-radius: .4rem;
+  padding: .35rem .55rem;
+  font-size: .8rem;
+  font-weight: 600;
+  cursor: pointer;
+  min-width: 3.6rem;
+}
+.color-button.selected { outline: 3px solid #111; outline-offset: 1px; }
+
+.bird-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: .5rem; margin-top: .8rem; }
+.bird-card {
+  border: 2px solid #dde5e3; border-radius: .5rem; background: #fff;
+  padding: .5rem; cursor: pointer; text-align: left;
+}
+.bird-card.selected { border-color: $primary; box-shadow: 0 0 0 2px $primary; }
+.bird-card .name { font-weight: 700; display: block; margin-bottom: .3rem; }
+.rings { display: grid; grid-template-columns: auto auto; gap: 2px 10px; justify-content: start; font-size: .7rem; }
+.pill { display: inline-block; padding: 1px 5px; border-radius: 3px; min-width: 2.2rem; text-align: center; }
+.hint { font-size: .9rem; color: #555; }
+.selected-bird { font-weight: 600; margin-top: .6rem; }
+
+#obs-map { height: 360px; border-radius: .5rem; margin: .5rem 0; }
+
+.form-grid { display: grid; grid-template-columns: 1fr 1fr; gap: .75rem 1rem; }
+@media (max-width: 560px) { .form-grid { grid-template-columns: 1fr; } }
+.form-grid label { font-weight: 600; font-size: .9rem; display: block; }
+.form-grid .full { grid-column: 1 / -1; }
+.hp { position: absolute; left: -9999px; }
+
+.msg { padding: .8rem 1rem; border-radius: .5rem; margin-top: 1rem; }
+.msg.ok { background: #e3f4e8; color: #1d5b32; }
+.msg.err { background: #fbe5e3; color: #8a1f17; }

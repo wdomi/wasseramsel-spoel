@@ -1,0 +1,26 @@
+---
+title: "Segnalare un merlo acquaiolo"
+subtitle: "Leggere gli anelli – trovare il nome – inviare l’osservazione"
+lang: it
+---
+
+[← Torna al progetto](index.qmd)
+
+Ha visto un merlo acquaiolo lungo lo Spöl o un altro corso d’acqua in Engadina? Scelga gli anelli colorati che ha riconosciuto. Il finder le mostra di quale merlo acquaiolo potrebbe trattarsi. Indichi poi il luogo dell’osservazione sulla carta e invii la segnalazione. Arriverà direttamente alla direzione del progetto.
+
+::: {.callout-tip collapse="true"}
+## Consigli per leggere gli anelli
+- **Sinistra e destra dal punto di vista dell’uccello:** se il merlo acquaiolo La guarda, la zampa sinistra dell’uccello è alla Sua destra.
+- Ogni zampa porta al massimo due anelli. L’anello di alluminio («alu») è grigio argento.
+- Non è sicuro/a? Scelga solo i colori riconosciuti con certezza e annoti il resto nelle osservazioni.
+- Anche i merli acquaioli senza anelli sono interessanti: li segnali comunque!
+:::
+
+```{=html}
+<div id="dipper-finder"></div>
+<script src="../assets/finder.js"></script>
+```
+
+::: {.sources}
+I suoi dati vengono utilizzati solo per il progetto sul merlo acquaiolo e non vengono pubblicati. Base cartografica © swisstopo.
+:::

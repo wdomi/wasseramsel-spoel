@@ -1,0 +1,87 @@
+---
+title: "Le cincle plongeur du Spöl"
+subtitle: "Un projet d’accompagnement de l’assainissement des PCB dans le Parc National Suisse"
+lang: fr
+---
+
+::: {.hero}
+::: {}
+[Le cincle plongeur – en romanche *Merl da l'Ova* – vit toute l’année le long du Spöl. C’est le seul passereau qui plonge pour chercher des larves d’insectes au fond du torrent. Nous le suivons pendant et après l’assainissement du Spöl pour savoir comment il se porte. **Pour cela, nous avons besoin de vos observations.**]{.lead}
+
+[Vu un cincle ? Signalez-le](observation.qmd){.cta}
+[L’assainissement](#sanierung){.cta .secondary}
+:::
+![](../assets/wasseramsel.png){fig-alt="Dessin d’un cincle plongeur portant des bagues de couleur"}
+:::
+
+## L’assainissement du Spöl {#sanierung}
+
+Le Spöl s’écoule du lac de Livigno à travers le Parc National Suisse. En automne 2016, lors de travaux anticorrosion sur le barrage de Punt dal Gall, des polychlorobiphényles (PCB) se sont retrouvés dans le torrent. Les PCB sont des polluants persistants qui s’accumulent dans les sédiments et, par la chaîne alimentaire, dans les animaux.
+
+::: {.timeline}
+::: {}
+**2016** – Lors de travaux sur le barrage de Punt dal Gall, des PCB se retrouvent dans le Spöl.
+:::
+::: {}
+**Août 2025** – Travaux préparatoires : installation de chantier au barrage, déplacement d’environ 12 000 poissons. Le sentier depuis le barrage reste fermé au moins jusqu’à fin 2026.
+:::
+::: {}
+**Dès le printemps 2026** – Sur environ 3 km (tronçons 1 à 3), le lit du torrent est excavé. Les sédiments fins contaminés sont séparés et éliminés thermiquement, le matériau nettoyé est remis dans le torrent.
+:::
+::: {}
+**Ensuite** – Le tronçon inférieur (environ 2,5 km) doit être nettoyé par des crues artificielles ciblées. Les autorités décideront, sur la base de prélèvements, si le tronçon près de l’embouchure de l’Ova dal Fuorn doit aussi être assaini.
+:::
+:::
+
+## Pourquoi le cincle plongeur ?
+
+Le cincle plongeur se trouve au sommet de la chaîne alimentaire du torrent. Il se nourrit de larves de trichoptères, de plécoptères et d’éphémères qui vivent sur et dans les sédiments, précisément là où se trouvent les PCB. Des études menées en Grande-Bretagne et en Irlande montrent que les PCB sont détectables dans les œufs du cincle. L’espèce est donc considérée comme un bon indicateur de l’état d’un cours d’eau.
+
+L’assainissement modifie en outre fortement l’habitat : le lit du torrent est remodelé et les larves d’insectes doivent le recoloniser. Nous voulons comprendre :
+
+- Les cincles restent-ils dans leurs territoires ou se déplacent-ils ?
+- Combien survivent et se reproduisent pendant et après les travaux ?
+- À quelle vitesse le Spöl assaini est-il recolonisé ?
+
+## Chaque cincle a un nom
+
+Les cincles du Spöl portent une combinaison individuelle de **bagues de couleur**. Elle permet de reconnaître chaque oiseau aux jumelles, sans devoir le recapturer. Chaque individu porte un nom. Chaque lecture nous indique qu’un oiseau précis vit à un endroit précis.
+
+## Comment participer
+
+::: {.steps}
+::: {}
+[1]{.num}
+
+**Observer.** Regardez les pattes aux jumelles : quelles couleurs porte la patte gauche, lesquelles la droite ?
+:::
+::: {}
+[2]{.num}
+
+**Choisir les bagues.** Cliquez sur les couleurs dans le finder : vous voyez aussitôt de quel cincle il pourrait s’agir, avec son nom.
+:::
+::: {}
+[3]{.num}
+
+**Signaler.** Placez le lieu sur la carte, indiquez la date et vos coordonnées, puis envoyez. Les observations sans bagues reconnues sont aussi précieuses !
+:::
+:::
+
+[Vers le finder et le formulaire](observation.qmd){.cta}
+
+::: {.callout-note}
+## À noter
+Dans le Parc National, la règle est de rester sur les sentiers et de ne pas déranger les animaux. Pendant l’assainissement, le sentier le long du Spöl depuis le barrage de Punt dal Gall est fermé. Observez les sites de nidification uniquement à distance.
+:::
+
+## Contact
+
+Questions sur le projet : *coordonnées à venir.*
+
+::: {.sources}
+**Sources sur l’assainissement :**
+[Parc National Suisse – assainissement des PCB du Spöl](https://nationalpark.ch/spoelsanierung/) ·
+[Engadiner Kraftwerke – PCB Sanierung Spöl](https://www.ekwstrom.ch/projekte/pcb-sanierung-spoel) ·
+[Engadiner Post, 18.8.2025](https://www.engadinerpost.ch/news/2025/08/18/Spoel-Sanierung-Die-Vorbereitungsarbeiten-starten) ·
+[SRF Regionaljournal, 30.6.2026](https://www.srf.ch/audio/regionaljournal-graubuenden/spoel-sanierung-laeuft-nach-plan?id=AUDI20260630_NR_0014)
+:::

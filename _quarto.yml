@@ -1,0 +1,34 @@
+project:
+  type: website
+  output-dir: _site
+  resources:
+    - assets/
+
+website:
+  title: "Wasseramsel am Spöl"
+  favicon: assets/favicon.png
+  site-url: https://wdomi.github.io/wasseramsel-spoel/
+  page-navigation: false
+  navbar:
+    logo: assets/favicon.png
+    # Language switch only – each page carries its own links in its language
+    right:
+      - href: index.qmd
+        text: "DE"
+      - href: it/index.qmd
+        text: "IT"
+      - href: fr/index.qmd
+        text: "FR"
+  page-footer:
+    center: |
+      Merls da l'Ova · Wasseramsel-Projekt am Spöl · Schweizerischer Nationalpark
+
+format:
+  html:
+    theme: [flatly, assets/custom.scss]
+    toc: false
+    lang: de
+    include-in-header:
+      text: |
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.css">
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/leaflet.min.js"></script>
