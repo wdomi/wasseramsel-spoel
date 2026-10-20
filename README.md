@@ -9,7 +9,7 @@ Quarto-Website (DE / IT / FR) zum Wasseramsel-Projekt als Begleitprojekt der PCB
 ## Backend
 
 Finder und Formular nutzen zwei Endpunkte der bestehenden Vercel-App
-[`wdomi/merlsdalova`](https://github.com/wdomi/merlsdalova) (`https://merlotschadaua.vercel.app`):
+[`wdomi/merlsdalova`](https://github.com/wdomi/merlsdalova) (`https://dipper-finder.vercel.app`):
 
 | Endpunkt | Zweck |
 |---|---|

@@ -8,7 +8,7 @@
   "use strict";
 
   // Backend: Vercel-App "merlsdalova" (siehe README)
-  const API_BASE = window.DIPPER_API_BASE || "https://merlotschadaua.vercel.app";
+  const API_BASE = window.DIPPER_API_BASE || "https://dipper-finder.vercel.app";
 
   // Spöl zwischen Punt dal Gall und Ova Spin
   const DEFAULT_CENTER = [46.645, 10.18];
