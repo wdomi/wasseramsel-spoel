@@ -83,9 +83,11 @@ Vous avez lu les bagues de couleur d’un cincle ? Choisissez-les ici et découv
 Dans le Parc National, la règle est de rester sur les sentiers et de ne pas déranger les animaux. Pendant l’assainissement, le sentier le long du Spöl depuis le barrage de Punt dal Gall est fermé. Observez les sites de nidification uniquement à distance.
 :::
 
-## Contact
+## Équipe du projet et partenaires {#team}
 
-Questions sur le projet : *coordonnées à venir.*
+Le projet sur le cincle plongeur est dirigé par le **Prof. Lukas Keller** du Department of Evolutionary Biology and Environmental Studies (DEBES) de l’Université de Zurich.
+
+Le travail de terrain est réalisé en collaboration avec le **Parc National Suisse** et bénéficie du précieux soutien de l’infatigable équipe des **gardes du parc**. Un grand merci !
 
 ::: {.sources}
 **Sources sur l’assainissement :**

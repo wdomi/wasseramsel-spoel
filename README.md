@@ -1,10 +1,10 @@
 # Wasseramsel am Spöl – Projektwebsite
 
-Quarto-Website (DE / IT / FR) zum Wasseramsel-Projekt als Begleitprojekt der PCB-Sanierung des Spöl im Schweizerischen Nationalpark.
+Quarto-Website (DE / IT / FR / EN) zum Wasseramsel-Projekt als Begleitprojekt der PCB-Sanierung des Spöl im Schweizerischen Nationalpark.
 
-- `index.qmd`, `it/index.qmd`, `fr/index.qmd` – Projektvorstellung
-- `beobachtung.qmd`, `it/osservazione.qmd`, `fr/observation.qmd` – Farbring-Finder und Meldeformular
-- `assets/finder.js` – Finder, Karte (swisstopo) und Formular, alle Texte in drei Sprachen
+- `index.qmd`, `it/index.qmd`, `fr/index.qmd`, `en/index.qmd` – Projektvorstellung mit Namenssuche
+- `beobachtung.qmd`, `it/osservazione.qmd`, `fr/observation.qmd`, `en/report.qmd` – Farbring-Finder und Meldeformular
+- `assets/finder.js` – Finder, Karte (swisstopo) und Formular, alle Texte in vier Sprachen
 
 ## Backend
 

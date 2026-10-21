@@ -4,8 +4,6 @@ subtitle: "Ein Begleitprojekt zur PCB-Sanierung im Schweizerischen Nationalpark"
 lang: de
 ---
 
-<!-- TODO: Projektträger, Projektleitung und Partner ergänzen und Angaben zum Monitoring prüfen -->
-
 ::: {.hero}
 ::: {}
 [Die Wasseramsel – rätoromanisch *Merl da l'Ova* – lebt das ganze Jahr am Spöl. Als einziger Singvogel taucht sie nach Insektenlarven am Bachgrund. Wir begleiten sie während und nach der Sanierung des Spöl und wollen wissen, wie es ihr geht. **Dafür brauchen wir Ihre Beobachtungen.**]{.lead}
@@ -85,10 +83,11 @@ Sie haben die Farbringe einer Wasseramsel abgelesen? Wählen Sie sie hier aus un
 Im Nationalpark gilt: auf den Wegen bleiben und Tiere nicht stören. Der Wanderweg entlang des Spöl ab der Staumauer Punt dal Gall ist während der Sanierung gesperrt. Beobachten Sie Brutplätze nur aus Distanz.
 :::
 
-## Kontakt
+## Projektteam und Partner {#team}
 
-<!-- TODO: Name, Institution und Kontaktadresse der Projektleitung -->
-Fragen zum Projekt: *Kontaktangaben folgen.*
+Das Wasseramsel-Projekt wird von **Prof. Lukas Keller** am Department of Evolutionary Biology and Environmental Studies (DEBES) der Universität Zürich geleitet.
+
+Die Feldarbeit findet in Zusammenarbeit mit dem **Schweizerischen Nationalpark** statt und wird vom Team der unermüdlichen **Parkwächterinnen und Parkwächter** tatkräftig unterstützt. Herzlichen Dank!
 
 ::: {.sources}
 **Quellen zur Sanierung:**

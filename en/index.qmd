@@ -1,0 +1,98 @@
+---
+title: "The dipper on the Spöl"
+subtitle: "A project accompanying the PCB remediation in the Swiss National Park"
+lang: en
+---
+
+::: {.hero}
+::: {}
+[The white-throated dipper – *Merl da l'Ova* in Romansh – lives on the Spöl all year round. It is the only songbird that dives for insect larvae on the riverbed. We follow the dippers during and after the remediation of the Spöl to find out how they are doing. **For this we need your sightings.**]{.lead}
+
+[Seen a dipper? Report it](report.qmd){.cta}
+[About the remediation](#sanierung){.cta .secondary}
+:::
+![](../assets/wasseramsel.png){fig-alt="Drawing of a dipper wearing colour rings"}
+:::
+
+## The remediation of the Spöl {#sanierung}
+
+The Spöl flows from Lake Livigno through the Swiss National Park. In autumn 2016, polychlorinated biphenyls (PCBs) entered the river during corrosion-protection work on the Punt dal Gall dam. PCBs are persistent pollutants that accumulate in sediments and, through the food chain, in animals.
+
+::: {.timeline}
+::: {}
+**2016** – PCBs enter the Spöl during work on the Punt dal Gall dam.
+:::
+::: {}
+**August 2025** – Preparatory work: a site installation at the dam, and about 12,000 fish are relocated. The trail from the dam remains closed until at least the end of 2026.
+:::
+::: {}
+**From spring 2026** – Along about 3 km (sections 1–3) the riverbed is excavated. The PCB-contaminated fine sediment is separated and disposed of thermally; the cleaned material goes back into the river.
+:::
+::: {}
+**Afterwards** – The lower section (about 2.5 km) is to be flushed with targeted artificial floods. Based on sampling, the authorities will decide whether the stretch near the mouth of the Ova dal Fuorn also needs to be remediated.
+:::
+:::
+
+## Why the dipper?
+
+The dipper sits at the top of the river’s food chain. It feeds on caddisfly, stonefly and mayfly larvae that live on and in the sediment – exactly where the PCBs are. Studies from Britain and Ireland show that PCBs can be detected in dipper eggs. The species is therefore considered a good indicator of the state of a river.
+
+The remediation also changes the habitat drastically: the riverbed is rebuilt and the insect larvae have to recolonise the river. We want to understand:
+
+- Do the dippers stay in their territories or move away?
+- How many survive and breed during and after the works?
+- How quickly is the remediated Spöl recolonised?
+
+## Every dipper has a name
+
+The dippers on the Spöl wear an individual combination of **colour rings**. This lets anyone recognise each bird through binoculars without catching it again. Every individual has a name. Every ring reading tells us that a particular bird lives at a particular place.
+
+## What is this dipper called? {#name-finden}
+
+Have you read the colour rings of a dipper? Select them here and find out the bird’s name.
+
+```{=html}
+<div id="dipper-finder" data-mode="lookup"></div>
+<script src="../assets/finder.js"></script>
+```
+
+## How you can help
+
+::: {.steps}
+::: {}
+[1]{.num}
+
+**Observe.** Look at the legs through binoculars: which colours are on the left and the right leg, top and bottom?
+:::
+::: {}
+[2]{.num}
+
+**Select the rings.** Click the colours in the finder. You will immediately see which dipper it could be, with its name.
+:::
+::: {}
+[3]{.num}
+
+**Report.** Mark the place on the map, add the date and your contact details, and send. Sightings without readable rings are valuable too!
+:::
+:::
+
+[To the finder and report form](report.qmd){.cta}
+
+::: {.callout-note}
+## Please note
+In the National Park, stay on the trails and do not disturb the animals. The trail along the Spöl from the Punt dal Gall dam is closed during the remediation. Watch nesting sites only from a distance.
+:::
+
+## Project team and partners {#team}
+
+The dipper project is led by **Prof. Lukas Keller** at the Department of Evolutionary Biology and Environmental Studies (DEBES) of the University of Zurich.
+
+The fieldwork is carried out in collaboration with the **Swiss National Park**, with strong support from its team of valiant **park rangers**. Thank you!
+
+::: {.sources}
+**Sources on the remediation:**
+[Swiss National Park – PCB remediation of the Spöl](https://nationalpark.ch/spoelsanierung/) ·
+[Engadiner Kraftwerke – PCB Sanierung Spöl](https://www.ekwstrom.ch/projekte/pcb-sanierung-spoel) ·
+[Engadiner Post, 18.8.2025](https://www.engadinerpost.ch/news/2025/08/18/Spoel-Sanierung-Die-Vorbereitungsarbeiten-starten) ·
+[SRF Regionaljournal, 30.6.2026](https://www.srf.ch/audio/regionaljournal-graubuenden/spoel-sanierung-laeuft-nach-plan?id=AUDI20260630_NR_0014)
+:::

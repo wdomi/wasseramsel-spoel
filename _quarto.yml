@@ -19,6 +19,8 @@ website:
         text: "IT"
       - href: fr/index.qmd
         text: "FR"
+      - href: en/index.qmd
+        text: "EN"
   page-footer:
     center: |
       Merls da l'Ova · Wasseramsel-Projekt am Spöl · Schweizerischer Nationalpark

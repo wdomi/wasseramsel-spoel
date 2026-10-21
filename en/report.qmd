@@ -1,0 +1,26 @@
+---
+title: "Report a dipper"
+subtitle: "Read the rings – find the name – send your sighting"
+lang: en
+---
+
+[← Back to the project](index.qmd)
+
+Have you seen a dipper on the Spöl or another river in the Engadine? Select the colour rings you recognised. The finder shows you which dipper it could be. Then mark the place of the sighting on the map and send your report. It goes directly to the project lead.
+
+::: {.callout-tip collapse="true"}
+## Tips for reading the rings
+- **Left and right from the bird’s point of view:** if the dipper is facing you, its left leg is on your right.
+- Each leg carries two rings, one at the top and one at the bottom. Pay attention to the order. The aluminium ring (“alu”) is silver-grey.
+- Unsure? Select only the colours you are certain of and note the rest in the remarks.
+- Dippers without rings are interesting too: please report them anyway!
+:::
+
+```{=html}
+<div id="dipper-finder"></div>
+<script src="../assets/finder.js"></script>
+```
+
+::: {.sources}
+Your details are used only for the dipper project and are not published. Map data © swisstopo.
+:::

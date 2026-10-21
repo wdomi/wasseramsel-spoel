@@ -116,6 +116,38 @@
       needConsent: "Veuillez confirmer votre consentement.",
       geoErr: "Impossible de déterminer votre position.",
       reportThis: "Signaler cette observation →", reportPage: "observation.html"
+    },
+    en: {
+      colors: { alu: "alu", white: "white", red: "red", yellow: "yellow", green: "green", blue: "blue", rosa: "rose", pink: "pink", violet: "violet", bronze: "bronze", black: "black", black_nr: "black #" },
+      step1: "1 · Which colour rings did you see?",
+      step1Hint: "Tap a ring position, then choose its colour. Left and right from the bird’s point of view. Leave rings you could not read empty.",
+      left: "Left leg", right: "Right leg", top: "top", bottom: "bottom",
+      clearSlot: "empty / unknown",
+      swapped: "No exact match. These dippers match if top and bottom are swapped:",
+      reset: "Reset selection",
+      matches: n => `${n} matching dipper${n === 1 ? "" : "s"}`,
+      noMatch: "No known dipper with this combination. Please report the sighting anyway – the colours you entered will be sent along.",
+      loading: "Loading dippers …",
+      loadErr: "The list could not be loaded. You can still report a sighting.",
+      chosen: "Selected:", none: "not assigned",
+      noBird: "Unsure / no rings",
+      step2: "2 · Where and when?",
+      step2Hint: "Click on the map or drag the marker to where you saw the bird.",
+      locate: "📍 My location",
+      date: "Date", time: "Time", count: "Number of birds",
+      coords: "Coordinates",
+      step3: "3 · Your details",
+      name: "Name", email: "Email", phone: "Phone (optional)",
+      remark: "Remarks (behaviour, food in the bill, nest …)",
+      consent: "I agree that my details may be used for the dipper project and that I may be contacted with questions.",
+      submit: "Send sighting",
+      sending: "Sending …",
+      ok: "Thank you very much! Your sighting has been sent.",
+      err: "Sending failed. Please try again later.",
+      needPos: "Please mark the place of the sighting on the map.",
+      needConsent: "Please confirm your consent.",
+      geoErr: "Your location could not be determined.",
+      reportThis: "Report this sighting →", reportPage: "report.html"
     }
   };
 
