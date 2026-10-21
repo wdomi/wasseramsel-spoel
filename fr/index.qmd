@@ -4,15 +4,12 @@ subtitle: "Un projet d’accompagnement de l’assainissement des PCB dans le Pa
 lang: fr
 ---
 
-::: {.hero}
-::: {}
+![Cincle plongeur « Flurin » sur le Spöl inférieur près de Zernez. Photo : Fadri Wehrli](../assets/flurin-fadri-wehrli.jpg){.hero-photo fig-alt="Cincle plongeur bagué sur une pierre au bord du Spöl"}
+
 [Le cincle plongeur – en romanche *Merl da l'Ova* – vit toute l’année le long du Spöl. C’est le seul passereau qui plonge pour chercher des larves d’insectes au fond du torrent. Nous le suivons pendant et après l’assainissement du Spöl pour savoir comment il se porte. **Pour cela, nous avons besoin de vos observations.**]{.lead}
 
 [Vu un cincle ? Signalez-le](observation.qmd){.cta}
 [L’assainissement](#sanierung){.cta .secondary}
-:::
-![](../assets/wasseramsel.png){fig-alt="Dessin d’un cincle plongeur portant des bagues de couleur"}
-:::
 
 ## L’assainissement du Spöl {#sanierung}
 
@@ -85,7 +82,7 @@ Dans le Parc National, la règle est de rester sur les sentiers et de ne pas dé
 
 ## Équipe du projet et partenaires {#team}
 
-Le projet sur le cincle plongeur est dirigé par le **Prof. Lukas Keller** du Department of Evolutionary Biology and Environmental Studies (DEBES) de l’Université de Zurich.
+Le projet sur le cincle plongeur est dirigé par le **[Prof. Lukas Keller](https://www.ieu.uzh.ch/en/research/evolbiol/natural.html)** du Department of Evolutionary Biology and Environmental Studies (DEBES) de l’Université de Zurich.
 
 Le travail de terrain est réalisé en collaboration avec le **Parc National Suisse** et bénéficie du précieux soutien de l’infatigable équipe des **gardes du parc**. Un grand merci !
 

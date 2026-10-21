@@ -98,3 +98,6 @@ $navbar-bg: #2f5d62;
 .msg { padding: .8rem 1rem; border-radius: .5rem; margin-top: 1rem; }
 .msg.ok { background: #e3f4e8; color: #1d5b32; }
 .msg.err { background: #fbe5e3; color: #8a1f17; }
+
+.hero-photo img, img.hero-photo { width: 100%; height: auto; border-radius: .6rem; }
+.quarto-figure figcaption { font-size: .85rem; color: #666; margin-top: .3rem; }

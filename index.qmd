@@ -4,15 +4,12 @@ subtitle: "Ein Begleitprojekt zur PCB-Sanierung im Schweizerischen Nationalpark"
 lang: de
 ---
 
-::: {.hero}
-::: {}
+![Wasseramsel «Flurin» am unteren Spöl bei Zernez. Foto: Fadri Wehrli](assets/flurin-fadri-wehrli.jpg){.hero-photo fig-alt="Wasseramsel mit Farbringen auf einem Stein am Spöl"}
+
 [Die Wasseramsel – rätoromanisch *Merl da l'Ova* – lebt das ganze Jahr am Spöl. Als einziger Singvogel taucht sie nach Insektenlarven am Bachgrund. Wir begleiten sie während und nach der Sanierung des Spöl und wollen wissen, wie es ihr geht. **Dafür brauchen wir Ihre Beobachtungen.**]{.lead}
 
 [Wasseramsel gesehen? Jetzt melden](beobachtung.qmd){.cta}
 [Mehr zur Sanierung](#sanierung){.cta .secondary}
-:::
-![](assets/wasseramsel.png){fig-alt="Zeichnung einer Wasseramsel mit Farbringen"}
-:::
 
 ## Die Sanierung des Spöl {#sanierung}
 
@@ -85,7 +82,7 @@ Im Nationalpark gilt: auf den Wegen bleiben und Tiere nicht stören. Der Wanderw
 
 ## Projektteam und Partner {#team}
 
-Das Wasseramsel-Projekt wird von **Prof. Lukas Keller** am Department of Evolutionary Biology and Environmental Studies (DEBES) der Universität Zürich geleitet.
+Das Wasseramsel-Projekt wird von **[Prof. Lukas Keller](https://www.ieu.uzh.ch/en/research/evolbiol/natural.html)** am Department of Evolutionary Biology and Environmental Studies (DEBES) der Universität Zürich geleitet.
 
 Die Feldarbeit findet in Zusammenarbeit mit dem **Schweizerischen Nationalpark** statt und wird vom Team der unermüdlichen **Parkwächterinnen und Parkwächter** tatkräftig unterstützt. Herzlichen Dank!
 

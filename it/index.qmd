@@ -4,15 +4,12 @@ subtitle: "Un progetto di accompagnamento al risanamento dai PCB nel Parco Nazio
 lang: it
 ---
 
-::: {.hero}
-::: {}
+![Merlo acquaiolo «Flurin» sullo Spöl inferiore presso Zernez. Foto: Fadri Wehrli](../assets/flurin-fadri-wehrli.jpg){.hero-photo fig-alt="Merlo acquaiolo con anelli colorati su un sasso lungo lo Spöl"}
+
 [Il merlo acquaiolo – in romancio *Merl da l'Ova* – vive tutto l’anno lungo lo Spöl. È l’unico uccello canoro che si immerge per cercare larve di insetti sul fondo del torrente. Lo seguiamo durante e dopo il risanamento dello Spöl per capire come sta. **Per questo abbiamo bisogno delle vostre osservazioni.**]{.lead}
 
 [Visto un merlo acquaiolo? Segnalatelo](osservazione.qmd){.cta}
 [Il risanamento](#sanierung){.cta .secondary}
-:::
-![](../assets/wasseramsel.png){fig-alt="Disegno di un merlo acquaiolo con anelli colorati"}
-:::
 
 ## Il risanamento dello Spöl {#sanierung}
 
@@ -85,7 +82,7 @@ Nel Parco Nazionale vale la regola: restare sui sentieri e non disturbare gli an
 
 ## Team del progetto e partner {#team}
 
-Il progetto sul merlo acquaiolo è diretto dal **Prof. Lukas Keller** del Department of Evolutionary Biology and Environmental Studies (DEBES) dell’Università di Zurigo.
+Il progetto sul merlo acquaiolo è diretto dal **[Prof. Lukas Keller](https://www.ieu.uzh.ch/en/research/evolbiol/natural.html)** del Department of Evolutionary Biology and Environmental Studies (DEBES) dell’Università di Zurigo.
 
 Il lavoro sul campo si svolge in collaborazione con il **Parco Nazionale Svizzero** e con il prezioso sostegno dell’instancabile team delle **guardie del parco**. Grazie di cuore!
 

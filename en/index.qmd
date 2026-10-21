@@ -4,15 +4,12 @@ subtitle: "A project accompanying the PCB remediation in the Swiss National Park
 lang: en
 ---
 
-::: {.hero}
-::: {}
+![Dipper “Flurin”, lower Spöl near Zernez. Photo: Fadri Wehrli](../assets/flurin-fadri-wehrli.jpg){.hero-photo fig-alt="Colour-ringed dipper on a stone by the Spöl"}
+
 [The white-throated dipper – *Merl da l'Ova* in Romansh – lives on the Spöl all year round. It is the only songbird that dives for insect larvae on the riverbed. We follow the dippers during and after the remediation of the Spöl to find out how they are doing. **For this we need your sightings.**]{.lead}
 
 [Seen a dipper? Report it](report.qmd){.cta}
 [About the remediation](#sanierung){.cta .secondary}
-:::
-![](../assets/wasseramsel.png){fig-alt="Drawing of a dipper wearing colour rings"}
-:::
 
 ## The remediation of the Spöl {#sanierung}
 
@@ -85,7 +82,7 @@ In the National Park, stay on the trails and do not disturb the animals. The tra
 
 ## Project team and partners {#team}
 
-The dipper project is led by **Prof. Lukas Keller** at the Department of Evolutionary Biology and Environmental Studies (DEBES) of the University of Zurich.
+The dipper project is led by **[Prof. Lukas Keller](https://www.ieu.uzh.ch/en/research/evolbiol/natural.html)** at the Department of Evolutionary Biology and Environmental Studies (DEBES) of the University of Zurich.
 
 The fieldwork is carried out in collaboration with the **Swiss National Park**, with strong support from its team of valiant **park rangers**. Thank you!
 
