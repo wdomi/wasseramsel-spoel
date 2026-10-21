@@ -4,7 +4,7 @@ subtitle: "Ein Begleitprojekt zur PCB-Sanierung im Schweizerischen Nationalpark"
 lang: de
 ---
 
-![Johann, die erste beringte Wasseramsel am Spöl, bei der BAFU-Messstation](assets/johann-watercolour.jpg){.hero-photo fig-alt="Aquarell einer Wasseramsel mit Farbringen auf einem Stein im Bach"}
+![Johann, die erste beringte Wasseramsel am Spöl, bei der BAFU-Messstation](assets/johann-watercolour.png){.hero-photo fig-alt="Aquarell von Wasseramsel Johann"}
 
 [Die Wasseramsel – rätoromanisch *Merl da l'Ova* – lebt das ganze Jahr am Spöl. Als einziger Singvogel taucht sie nach Insektenlarven am Bachgrund. Wir begleiten sie während und nach der Sanierung des Spöl und wollen wissen, wie es ihr geht. **Dafür brauchen wir Ihre Beobachtungen.**]{.lead}
 
