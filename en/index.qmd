@@ -4,7 +4,7 @@ subtitle: "A project accompanying the PCB remediation in the Swiss National Park
 lang: en
 ---
 
-![Dipper “Flurin”, lower Spöl near Zernez. Photo: Fadri Wehrli](../assets/flurin-fadri-wehrli.jpg){.hero-photo fig-alt="Colour-ringed dipper on a stone by the Spöl"}
+![Johann the first ringed white throated dipper on the Spöl at the BAFU Messstation](../assets/johann-watercolour.jpg){.hero-photo fig-alt="Watercolour of a colour-ringed dipper on a stone in a stream"}
 
 [The white-throated dipper – *Merl da l'Ova* in Romansh – lives on the Spöl all year round. It is the only songbird that dives for insect larvae on the riverbed. We follow the dippers during and after the remediation of the Spöl to find out how they are doing. **For this we need your sightings.**]{.lead}
 
