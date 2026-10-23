@@ -16,12 +16,27 @@ notes <- c(
   sprintf("%d beringte Vögel haben keine Koordinaten und fehlen auf der Karte.", ringing_out$missing_coords)
 )
 
+# Eigene Kartensymbole (hidden/markers/*.svg), sonst Platzhalter aus page.js
+marker_files <- c(
+  "Wasseramsel-Eier" = "wasseramsel-eier.svg", "Fische" = "fische.svg", "Fischlaich" = "fischlaich.svg",
+  "Makrozoobenthos" = "makrozoobenthos.svg", "Ufer-Spinnen" = "ufer-spinnen.svg"
+)
+markers <- list()
+for (g in names(marker_files)) {
+  f <- file.path(dir_page, "markers", marker_files[[g]])
+  if (file.exists(f)) {
+    svg <- paste(readLines(f, warn = FALSE, encoding = "UTF-8"), collapse = "\n")
+    markers[[g]] <- sub("^.*?(<svg)", "\\1", svg)   # XML-Kopf und Kommentare davor entfernen
+  }
+}
+
 data <- list(
   generated = format(Sys.Date()),
   pcb = pcb_out,
   ringing = ringing_out,
   observations = obs_out,
-  notes = notes
+  notes = notes,
+  markers = if (length(markers)) markers else NULL
 )
 json <- toJSON(data, dataframe = "rows", auto_unbox = TRUE, na = "null", null = "null", digits = NA)
 
