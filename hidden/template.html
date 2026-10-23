@@ -3,6 +3,12 @@
 <div class="cinclus">
   <p class="cinclus-stamp">Entwurf · Datenstand <span data-bind="generated"></span> · Quelle: Cinclopedia</p>
 
+  <h2>Probenahmestellen</h2>
+  <p>Wo die Proben für die PCB-Analysen gesammelt wurden. Kreisgrösse = Anzahl Proben am Ort, Klick zeigt
+     Gruppe, Art, Datum und Wert. Blau: Oberer Spöl, orange: Unterer Spöl, grün: Vergleichsgewässer
+     (Rom, Ova dal Fuorn). <span data-bind="no-coords"></span></p>
+  <figure id="map-samples" class="cinclus-map"></figure>
+
   <h2>PCB in Wasseramsel-Eiern</h2>
   <p>Summe der 6 Indikator-PCB pro Ei, in ng pro g Fett, nach Lage des Nests entlang des Spöl
      (km ab Punt dal Gall). Rom liegt an einem anderen Fluss und steht darum rechts für sich.
@@ -19,8 +25,6 @@
      Ufer-Spinnen fassen Wolf- und Radnetzspinnen zusammen. Hohle Punkte: Wert evtl. nicht auf Fett bezogen
      (siehe offene Punkte unten).</p>
   <figure id="chart-chain" class="cinclus-chart"></figure>
-  <h3>Pro Gruppe über die Zeit</h3>
-  <div id="chart-groups" class="cinclus-grid"></div>
   <details>
     <summary>Tabelle aller PCB-Proben</summary>
     <div id="table-pcb" class="cinclus-table"></div>

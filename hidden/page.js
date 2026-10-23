@@ -153,37 +153,6 @@
     })));
   }
 
-  function drawGroups() {
-    var wrap = $("chart-groups");
-    wrap.innerHTML = "";
-    var w = wrap.clientWidth >= 640 ? (wrap.clientWidth - 24) / 2 : wrap.clientWidth;
-    GROUPS.slice(0, 4).forEach(function (g) {
-      var data = samples.filter(function (d) { return d.group === g; });
-      if (!data.length) return;
-      var box = document.createElement("div");
-      box.innerHTML = "<h4>" + g + " <small>(n = " + data.length + ")</small></h4>";
-      wrap.appendChild(box);
-      box.appendChild(Plot.plot(Object.assign({}, common, {
-        width: Math.max(300, w), height: 220, marginLeft: 55,
-        x: { type: "utc", label: null, ticks: 4 },
-        y: { type: "log", label: "ng/g Fett", grid: true, tickFormat: fmtDe, ticks: 4 },
-        color: { domain: KEYS, range: KEY_COLORS },
-        marks: [
-          Plot.dot(data, {
-            x: function (d) { return new Date(d.date); }, y: "value",
-            stroke: key, strokeWidth: 2, r: 5, fill: key,
-            fillOpacity: function (d) { return d.unit_uncertain ? 0 : 0.85; }
-          }),
-          Plot.tip(data, Plot.pointer({
-            x: function (d) { return new Date(d.date); }, y: "value",
-            channels: { Probe: "label", Art: "taxon", Gewässer: "river_label" },
-            format: { x: false, y: function (v) { return fmtDe(v) + " ng/g"; } }
-          }))
-        ]
-      })));
-    });
-  }
-
   table($("table-pcb"), samples, [
     ["Gruppe", function (d) { return d.group; }],
     ["Art", function (d) { return d.taxon; }],
@@ -205,24 +174,32 @@
     { value: count(function (d) { return d.age_class === "Nestling"; }), label: "davon als Nestling" }
   ]);
 
-  function drawMap() {
-    var el = $("map-ringing");
+  // Karte mit einem Kreis pro Ort; Grösse = Anzahl Einträge, Klick listet sie auf.
+  function pointMap(el, rows, title, line) {
     var map = L.map(el, { scrollWheelZoom: false });
     L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
       { maxZoom: 18, attribution: '© <a href="https://www.swisstopo.admin.ch/">swisstopo</a>' }).addTo(map);
-    var places = d3.groups(birds.filter(function (d) { return d.lat != null; }),
+    var places = d3.groups(rows.filter(function (d) { return d.lat != null; }),
       function (d) { return d.lat + "," + d.lon; });
     var layer = L.featureGroup().addTo(map);
     places.forEach(function (p) {
       var list = p[1], first = list[0];
-      var color = colorOf(first);
       L.circleMarker([first.lat, first.lon], {
-        radius: 5 + 3 * Math.sqrt(list.length), color: "#fff", weight: 2, fillColor: color, fillOpacity: 0.85
-      }).bindPopup("<b>" + (first.place || "") + "</b><br>" + list.map(function (b) {
-        return b.name + " · " + dateDe(b.date) + " · " + b.age_class;
-      }).join("<br>")).addTo(layer);
+        radius: 5 + 3 * Math.sqrt(list.length), color: "#fff", weight: 2, fillColor: colorOf(first), fillOpacity: 0.85
+      }).bindPopup("<b>" + title(first) + "</b><br>" + list.map(line).join("<br>")).addTo(layer);
     });
-    map.fitBounds(layer.getBounds().pad(0.15));
+    map.fitBounds(layer.getBounds().pad(0.1));
+  }
+
+  function drawMaps() {
+    var missing = d3.rollups(samples.filter(function (d) { return d.lat == null; }), function (v) { return v.length; }, function (d) { return d.group; });
+    root.querySelector("[data-bind=no-coords]").textContent = missing.length
+      ? "Ohne Koordinaten und darum nicht auf der Karte: " + missing.map(function (m) { return m[0] + " (" + m[1] + ")"; }).join(", ") + "."
+      : "";
+    pointMap($("map-samples"), samples, function (d) { return d.river_label + (d.km != null && d.river !== "RO" ? " · " + d.km.toFixed(1) + " km" : ""); },
+      function (d) { return d.group + " · " + d.taxon + " · " + dateDe(d.date) + " · " + fmtDe(d.value) + " ng/g"; });
+    pointMap($("map-ringing"), birds, function (d) { return d.place || ""; },
+      function (b) { return b.name + " · " + dateDe(b.date) + " · " + b.age_class; });
   }
 
   function withSeason(d) { return Object.assign({ saison: d.season + " " + d.year }, d); }
@@ -281,9 +258,9 @@
 
   $("notes").innerHTML = (D.notes || []).map(function (n) { return "<li>" + n + "</li>"; }).join("");
 
-  function drawAll() { drawEggs(); drawChain(); drawGroups(); drawProfile(); drawSeasons(); }
+  function drawAll() { drawEggs(); drawChain(); drawProfile(); drawSeasons(); }
   drawAll();
-  drawMap();
+  drawMaps();
   var t;
   window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(drawAll, 200); });
 })();
