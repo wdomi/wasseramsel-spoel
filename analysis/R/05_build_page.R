@@ -2,7 +2,7 @@
 # Schreibt (beides nicht im Repo, Ordner hidden-src/ ist in .gitignore):
 #   hidden-src/inhalt.html   – Inhalt für die Verschlüsselung (tools/encrypt_hidden.py)
 #   hidden-src/preview.html  – eigenständige Vorschau zum Öffnen im Browser / RStudio-Viewer
-# Erwartet `pcb_out` und `ringing_out` aus 02_pcb.R und 03_ringing.R.
+# Erwartet `pcb_out`, `ringing_out` und `obs_out` aus 02_pcb.R, 03_ringing.R und 04_observations.R.
 
 source("R/00_setup.R")
 
@@ -19,6 +19,7 @@ data <- list(
   generated = format(Sys.Date()),
   pcb = pcb_out,
   ringing = ringing_out,
+  observations = obs_out,
   notes = notes
 )
 json <- toJSON(data, dataframe = "rows", auto_unbox = TRUE, na = "null", null = "null", digits = NA)

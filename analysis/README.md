@@ -14,7 +14,8 @@ analysis/
   R/01_fetch.R          Datenbank -> data-raw/*.csv
   R/02_pcb.R            PCB-Proben gruppieren, Blindwerte/unsichere Werte markieren
   R/03_ringing.R        Beringungen, Altersklassen vereinheitlichen
-  R/04_build_page.R     Vorlage + Daten -> ../hidden-src/inhalt.html und preview.html
+  R/04_observations.R   Beobachtungen pro Transekt und Monat
+  R/05_build_page.R     Vorlage + Daten -> ../hidden-src/inhalt.html und preview.html
 hidden/                 Layout, Stil und Grafik-Code der Seite (ohne Daten)
 hidden-src/             erzeugter Klartext mit Daten (nicht im Repo)
 ```

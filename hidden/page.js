@@ -250,6 +250,41 @@
     })));
   }
 
+  // ---------- Beobachtungen: Transekt × Monat ----------
+  var MONTHS = ["Jan", "Feb", "Mär", "Apr", "Mai", "Jun", "Jul", "Aug", "Sep", "Okt", "Nov", "Dez"];
+  var monthLabel = function (m) { return MONTHS[+m.slice(5, 7) - 1] + " " + m.slice(2, 4); };
+  var O = D.observations;
+
+  function drawTransects() {
+    var el = $("chart-transects");
+    var cells = O.cells;
+    var rows = Array.from(new Set(cells.map(function (c) { return c.transect; })));
+    var max = d3.max(cells, function (c) { return c.n; });
+    el.replaceChildren(Plot.plot(Object.assign({}, common, {
+      width: Math.max(640, width(el)), height: 70 + 24 * rows.length,
+      marginLeft: 150, marginBottom: 40,
+      x: { domain: O.months, tickFormat: monthLabel, label: null, tickRotate: -45, padding: 0.06 },
+      y: { domain: rows, label: null, padding: 0.06 },
+      color: { type: "linear", domain: [0, max], range: ["#cde2fb", "#104281"], legend: true, label: "Beobachtungen" },
+      marks: [
+        Plot.cell(cells, {
+          x: "month", y: "transect", fill: "n", rx: 3,
+          channels: { Vögel: "birds", Beringungen: "ringing", Fänge: "catch", Ablesungen: "resight", Unberingt: "unringed" },
+          tip: { format: { x: monthLabel, y: true, fill: true } }
+        }),
+        Plot.text(cells, {
+          x: "month", y: "transect", text: "n", fontSize: 11,
+          fill: function (c) { return c.n > max / 2 ? "white" : tok("--text-primary"); }
+        })
+      ]
+    })));
+  }
+
+  var hidden = O.not_shown || [];
+  root.querySelector("[data-bind=obs-not-shown]").textContent = hidden.length
+    ? "Nicht gezeigt: " + hidden.map(function (h) { return h.where + " (" + h.n + ")"; }).join(", ") + "."
+    : "";
+
   table($("table-birds"), birds, [
     ["Name", function (d) { return d.name; }],
     ["Beringt", function (d) { return dateDe(d.date); }],
@@ -262,7 +297,7 @@
 
   $("notes").innerHTML = (D.notes || []).map(function (n) { return "<li>" + n + "</li>"; }).join("");
 
-  function drawAll() { drawEggs(); drawChain(); drawProfile(); drawSeasons(); }
+  function drawAll() { drawEggs(); drawChain(); drawProfile(); drawTransects(); drawSeasons(); }
   drawAll();
   drawMaps();
   var t;

@@ -8,7 +8,8 @@ encrypt       <- FALSE   # TRUE: assets/cinclus-vault.json neu schreiben (fragt 
 if (fetch_from_db) source("R/01_fetch.R")
 source("R/02_pcb.R")
 source("R/03_ringing.R")
-source("R/04_build_page.R")
+source("R/04_observations.R")
+source("R/05_build_page.R")
 
 if (interactive()) utils::browseURL(normalizePath("../hidden-src/preview.html"))
 
