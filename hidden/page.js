@@ -1,0 +1,253 @@
+// Grafiken der versteckten Seite. Braucht die globalen Bibliotheken Plot (Observable Plot), d3 und L (Leaflet)
+// sowie window.CINCLUS_DATA, das analysis/R/04_build_page.R vor diesem Skript einsetzt.
+(function () {
+  var D = window.CINCLUS_DATA;
+  var root = document.querySelector(".cinclus");
+  if (!D || !root) return;
+
+  var css = getComputedStyle(root);
+  var tok = function (n) { return css.getPropertyValue(n).trim(); };
+
+  // Farbe folgt dem Gewässer, überall gleich
+  // Rom und Ova dal Fuorn teilen sich die Farbe «Vergleichsgewässer» (beide unbelastet).
+  var RIVERS = ["Oberer Spöl", "Unterer Spöl", "Rom", "Ova dal Fuorn"];
+  var KEYS = ["Oberer Spöl", "Unterer Spöl", "Vergleichsgewässer"];
+  var KEY_COLORS = [tok("--series-1"), tok("--series-2"), tok("--series-3")];
+  var key = function (d) { return d.river === "SP" || d.river === "US" ? d.river_label : "Vergleichsgewässer"; };
+  var colorOf = function (d) { return KEY_COLORS[KEYS.indexOf(key(d))] || tok("--text-muted"); };
+  var riverColor = { legend: true, domain: KEYS, range: KEY_COLORS };
+  var AGE = ["Adult", "Diesjährig", "Nestling", "Unbekannt"];
+  var AGE_SYMBOLS = ["circle", "triangle", "square", "diamond"];
+
+  var fmt = d3.format(",.0f");
+  var fmtDe = function (v) { return fmt(v).replace(/,/g, "'"); };
+  var dateDe = function (s) { return s ? s.slice(8, 10) + "." + s.slice(5, 7) + "." + s.slice(0, 4) : ""; };
+  var width = function (el) { return Math.max(320, el.clientWidth || 640); };
+  var $ = function (id) { return document.getElementById(id); };
+
+  root.querySelectorAll("[data-bind=generated]").forEach(function (el) { el.textContent = dateDe(D.generated); });
+
+  var common = {
+    style: { fontSize: "13px", color: tok("--text-primary"), background: "transparent" },
+    marginLeft: 120
+  };
+  var xLog = { type: "log", label: "Summe 6 iPCB (ng/g Fett) →", grid: true, tickFormat: fmtDe };
+  var tipPcb = {
+    channels: { Probe: "label", Datum: function (d) { return dateDe(d.date); }, Gewässer: "river_label" },
+    format: { x: function (v) { return fmtDe(v) + " ng/g"; }, y: false, stroke: false, fill: false }
+  };
+
+  function tiles(el, items) {
+    el.innerHTML = items.map(function (t) {
+      var key = t.color ? '<span class="k" style="background:' + t.color + '"></span>' : "";
+      return '<div class="cinclus-tile"><div class="v">' + t.value + '</div><div class="l">' + key + t.label + "</div></div>";
+    }).join("");
+  }
+
+  function table(el, rows, cols) {
+    var h = "<table><thead><tr>" + cols.map(function (c) { return "<th>" + c[0] + "</th>"; }).join("") + "</tr></thead><tbody>";
+    rows.forEach(function (r) {
+      h += "<tr>" + cols.map(function (c) {
+        var v = c[1](r);
+        return "<td" + (typeof v === "number" ? ' class="num"' : "") + ">" + (typeof v === "number" ? fmtDe(v) : (v == null ? "" : v)) + "</td>";
+      }).join("") + "</tr>";
+    });
+    el.innerHTML = h + "</tbody></table>";
+  }
+
+  // ---------- PCB: Wasseramsel-Eier ----------
+  var samples = D.pcb.samples;
+  var eggs = samples.filter(function (d) { return d.group === "Wasseramsel-Eier"; });
+
+  tiles($("egg-tiles"), D.pcb.egg_summary.map(function (s) {
+    return {
+      value: fmtDe(s.median_factor) + "×",
+      label: s.river_label + ": Median über Höchstwert Hühnerei (n = " + s.n + ")",
+      color: colorOf(s)
+    };
+  }));
+
+  var yearSel = $("egg-year");
+  var years = Array.from(new Set(eggs.map(function (d) { return d.year; }))).sort();
+  yearSel.innerHTML = '<option value="">alle</option>' + years.map(function (y) { return "<option>" + y + "</option>"; }).join("");
+
+  function drawEggs() {
+    var el = $("chart-eggs");
+    var y = yearSel.value;
+    var data = eggs.filter(function (d) { return !y || String(d.year) === y; });
+    el.replaceChildren(Plot.plot(Object.assign({}, common, {
+      width: width(el), height: 220,
+      x: Object.assign({}, xLog, { domain: [10, 100000] }),
+      y: { axis: null },
+      color: riverColor,
+      marks: [
+        Plot.ruleX([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" }),
+        Plot.text([D.pcb.limit], { x: function (d) { return d; }, text: function () { return "Hühnerei-Höchstwert"; },
+          frameAnchor: "top", facetAnchor: "top", dy: -12, dx: 4, textAnchor: "start", fill: tok("--text-secondary"), fontSize: 11 }),
+        Plot.dot(data, Plot.dodgeY(Object.assign({
+          x: "value", fy: "river_label", fill: key, r: 5, anchor: "middle",
+          stroke: tok("--surface-1"), strokeWidth: 1.5, tip: { format: tipPcb.format }
+        }, { channels: tipPcb.channels })))
+      ],
+      fy: { domain: RIVERS.slice(0, 3), label: null },
+      marginTop: 18
+    })));
+  }
+  yearSel.addEventListener("change", drawEggs);
+
+  // ---------- PCB: Nahrungskette ----------
+  var GROUPS = ["Makrozoobenthos", "Ufer-Spinnen", "Fischlaich", "Fische", "Wasseramsel-Eier"];
+
+  function drawChain() {
+    var el = $("chart-chain");
+    el.replaceChildren(Plot.plot(Object.assign({}, common, {
+      width: width(el), height: 320,
+      x: Object.assign({}, xLog, { domain: [10, 100000] }),
+      y: { domain: GROUPS.slice().reverse(), label: null },
+      color: riverColor,
+      marks: [
+        Plot.ruleX([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" }),
+        Plot.dot(samples, {
+          x: "value", y: "group",
+          stroke: key, r: 5, strokeWidth: 2, fill: key,
+          fillOpacity: function (d) { return d.unit_uncertain ? 0 : 0.85; }
+        }),
+        Plot.tip(samples, Plot.pointer(Object.assign({ x: "value", y: "group" }, tipPcb)))
+      ]
+    })));
+  }
+
+  function drawGroups() {
+    var wrap = $("chart-groups");
+    wrap.innerHTML = "";
+    var w = wrap.clientWidth >= 640 ? (wrap.clientWidth - 24) / 2 : wrap.clientWidth;
+    GROUPS.slice(0, 4).forEach(function (g) {
+      var data = samples.filter(function (d) { return d.group === g; });
+      if (!data.length) return;
+      var box = document.createElement("div");
+      box.innerHTML = "<h4>" + g + " <small>(n = " + data.length + ")</small></h4>";
+      wrap.appendChild(box);
+      box.appendChild(Plot.plot(Object.assign({}, common, {
+        width: Math.max(300, w), height: 220, marginLeft: 55,
+        x: { type: "utc", label: null, ticks: 4 },
+        y: { type: "log", label: "ng/g Fett", grid: true, tickFormat: fmtDe, ticks: 4 },
+        color: { domain: KEYS, range: KEY_COLORS },
+        marks: [
+          Plot.dot(data, {
+            x: function (d) { return new Date(d.date); }, y: "value",
+            stroke: key, strokeWidth: 2, r: 5, fill: key,
+            fillOpacity: function (d) { return d.unit_uncertain ? 0 : 0.85; }
+          }),
+          Plot.tip(data, Plot.pointer({
+            x: function (d) { return new Date(d.date); }, y: "value",
+            channels: { Probe: "label", Art: "taxon", Gewässer: "river_label" },
+            format: { x: false, y: function (v) { return fmtDe(v) + " ng/g"; } }
+          }))
+        ]
+      })));
+    });
+  }
+
+  table($("table-pcb"), samples, [
+    ["Gruppe", function (d) { return d.group; }],
+    ["Art", function (d) { return d.taxon; }],
+    ["Probe", function (d) { return d.label; }],
+    ["Gewässer", function (d) { return d.river_label; }],
+    ["Datum", function (d) { return dateDe(d.date); }],
+    ["ng/g Fett", function (d) { return d.value; }],
+    ["× Hühnerei", function (d) { return d.factor; }],
+    ["Hinweis", function (d) { return [d.unit_uncertain ? "Einheit unsicher" : "", d.poor_recovery ? "schlechte Wiederfindung" : ""].filter(Boolean).join(", "); }]
+  ]);
+
+  // ---------- Beringungen ----------
+  var birds = D.ringing.birds;
+  var count = function (f) { return birds.filter(f).length; };
+  tiles($("ring-tiles"), [
+    { value: birds.length, label: "Wasseramseln beringt" },
+    { value: count(function (d) { return d.river === "SP"; }), label: "Oberer Spöl", color: KEY_COLORS[0] },
+    { value: count(function (d) { return d.river === "US"; }), label: "Unterer Spöl", color: KEY_COLORS[1] },
+    { value: count(function (d) { return d.age_class === "Nestling"; }), label: "davon als Nestling" }
+  ]);
+
+  function drawMap() {
+    var el = $("map-ringing");
+    var map = L.map(el, { scrollWheelZoom: false });
+    L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
+      { maxZoom: 18, attribution: '© <a href="https://www.swisstopo.admin.ch/">swisstopo</a>' }).addTo(map);
+    var places = d3.groups(birds.filter(function (d) { return d.lat != null; }),
+      function (d) { return d.lat + "," + d.lon; });
+    var layer = L.featureGroup().addTo(map);
+    places.forEach(function (p) {
+      var list = p[1], first = list[0];
+      var color = colorOf(first);
+      L.circleMarker([first.lat, first.lon], {
+        radius: 5 + 3 * Math.sqrt(list.length), color: "#fff", weight: 2, fillColor: color, fillOpacity: 0.85
+      }).bindPopup("<b>" + (first.place || "") + "</b><br>" + list.map(function (b) {
+        return b.name + " · " + dateDe(b.date) + " · " + b.age_class;
+      }).join("<br>")).addTo(layer);
+    });
+    map.fitBounds(layer.getBounds().pad(0.15));
+  }
+
+  function withSeason(d) { return Object.assign({ saison: d.season + " " + d.year }, d); }
+  function seasons(data) {
+    return Array.from(new Set(data.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; })
+      .map(function (d) { return d.saison; })));
+  }
+
+  function drawProfile() {
+    var el = $("chart-profile");
+    var data = birds.filter(function (d) { return d.km != null && (d.river === "SP" || d.river === "US"); }).map(withSeason);
+    el.replaceChildren(Plot.plot(Object.assign({}, common, {
+      width: width(el), height: 360, marginLeft: 110,
+      x: { label: "km ab Punt dal Gall →", grid: true, domain: [0, 14] },
+      y: { axis: null },
+      fy: { domain: seasons(data), label: null },
+      color: { domain: KEYS.slice(0, 2), range: KEY_COLORS.slice(0, 2), legend: true },
+      symbol: { legend: true, domain: AGE, range: AGE_SYMBOLS },
+      marks: [
+        Plot.dot(data, Plot.dodgeY({
+          x: "km", fy: "saison", stroke: key, symbol: "age_class", r: 4.5, strokeWidth: 2, anchor: "middle",
+          channels: { Name: "name", Ort: "place", Datum: function (d) { return dateDe(d.date); } },
+          tip: { format: { x: function (v) { return v + " km"; }, fy: false, stroke: false } }
+        }))
+      ]
+    })));
+  }
+
+  function drawSeasons() {
+    var el = $("chart-seasons");
+    var data = birds.map(withSeason);
+    var order = seasons(data);
+    el.replaceChildren(Plot.plot(Object.assign({}, common, {
+      width: width(el), height: 240, marginLeft: 40,
+      x: { domain: order, label: null },
+      y: { label: "Vögel", grid: true },
+      color: riverColor,
+      marks: [
+        Plot.barY(data, Plot.groupX({ y: "count" }, {
+          x: "saison", fill: key, stroke: tok("--surface-1"), strokeWidth: 2, inset: 2, tip: true
+        })),
+        Plot.ruleY([0])
+      ]
+    })));
+  }
+
+  table($("table-birds"), birds, [
+    ["Name", function (d) { return d.name; }],
+    ["Beringt", function (d) { return dateDe(d.date); }],
+    ["Gewässer", function (d) { return d.river_label; }],
+    ["Ort", function (d) { return d.place; }],
+    ["km ab PdG", function (d) { return d.km == null ? "" : d.km.toFixed(1); }],
+    ["Alter", function (d) { return d.age_class; }],
+    ["Geschlecht", function (d) { return d.sex; }]
+  ]);
+
+  $("notes").innerHTML = (D.notes || []).map(function (n) { return "<li>" + n + "</li>"; }).join("");
+
+  function drawAll() { drawEggs(); drawChain(); drawGroups(); drawProfile(); drawSeasons(); }
+  drawAll();
+  drawMap();
+  var t;
+  window.addEventListener("resize", function () { clearTimeout(t); t = setTimeout(drawAll, 200); });
+})();

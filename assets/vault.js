@@ -22,11 +22,21 @@
     return new TextDecoder().decode(plain);
   }
 
+  // Mit innerHTML eingesetzte <script> laufen nicht; darum neu anlegen, damit Daten und Grafik-Code ausgeführt werden.
+  function runScripts(el) {
+    el.querySelectorAll("script").forEach(function (old) {
+      var s = document.createElement("script");
+      s.textContent = old.textContent;
+      old.replaceWith(s);
+    });
+  }
+
   async function attempt(pw, silent) {
     msg.textContent = silent ? "" : "…";
     try {
       out.innerHTML = await unlock(pw);
       form.hidden = true;
+      runScripts(out);
       msg.textContent = "";
       try { sessionStorage.setItem(KEY, pw); } catch (e) {}
     } catch (e) {
