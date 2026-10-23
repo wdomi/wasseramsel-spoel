@@ -30,3 +30,33 @@
 .cinclus-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
 .cinclus details { margin: 1rem 0; }
 .cinclus details summary { cursor: pointer; color: var(--text-secondary); }
+.cinclus-btn { border: 0; font-size: .9rem; padding: .45rem .9rem; }
+.cinclus-map { position: relative; }
+.cinclus-labels { position: absolute; inset: 0; z-index: 650; pointer-events: none; }
+.cinclus-labels svg { position: absolute; left: 0; top: 0; }
+.cinclus-labels line { stroke: #333; stroke-width: 1; }
+.cinclus-label { position: absolute; left: 0; top: 0; display: flex; flex-wrap: wrap; gap: 4px 8px; box-sizing: border-box;
+  background: rgba(255,255,255,.94); border: 1px solid #bbb; border-radius: 4px; padding: 3px 5px; box-shadow: 0 1px 3px rgba(0,0,0,.2); }
+.cinclus-bird { font-size: .72rem; line-height: 1.2; margin: 2px 0 4px; }
+.cinclus-bird b { display: block; }
+.cinclus-bird .d { color: var(--text-secondary); }
+.cinclus-bird .rings { display: grid; grid-template-columns: auto auto; gap: 2px 6px; justify-content: start; font-size: .68rem; margin-top: 2px; }
+.cinclus-bird .pill { display: inline-block; padding: 0 4px; border-radius: 3px; min-width: 2rem; text-align: center; }
+.cinclus-label .cinclus-bird { margin: 0; }
+.cinclus-ringlist-place h4 { font-size: .9rem; margin: .75rem 0 .25rem; }
+.cinclus-ringlist-birds { display: flex; flex-wrap: wrap; gap: 6px 14px; }
+
+/* Abschnitte: PCB weiss, Beringung creme */
+.cinclus-sec { margin: 2rem -1rem; padding: .5rem 1rem 1.5rem; border-radius: .8rem; }
+.cinclus-sec.pcb { background: #ffffff; border: 1px solid #e6e4dc; }
+.cinclus-sec.ring { background: #f7f1e1; --surface-1: #f7f1e1; }
+.cinclus-sec.ring .cinclus-tile { background: #efe6cf; }
+.cinclus-sec > h2:first-child { margin-top: 1rem; }
+
+/* Kenngrösse klar kennzeichnen: iPCB dunkelgrün, dl-PCB braun */
+.cinclus-metric { font-size: 1.05rem; margin: 1.5rem 0 .25rem; display: flex; align-items: center; gap: .5rem; }
+.cinclus-metric .badge { color: #fff; font-size: .8rem; padding: .2rem .5rem; border-radius: .3rem; }
+.cinclus-metric.ipcb .badge { background: #2f5d62; }
+.cinclus-metric.dl .badge { background: #8a5a2b; }
+.cinclus-chart.ipcb { border-left: 4px solid #2f5d62; padding-left: .5rem; }
+.cinclus-chart.dl { border-left: 4px solid #8a5a2b; padding-left: .5rem; }

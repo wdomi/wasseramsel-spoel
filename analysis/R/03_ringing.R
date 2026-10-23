@@ -29,7 +29,9 @@ ringing <- ring_raw |>
   ) |>
   left_join(rivers, by = c("river_code" = "river")) |>
   transmute(id = individual_id, name, date = as.character(ringed_date), year, season,
-            river = river_code, river_label, age_class, sex, km, lat, lon, place, location_source)
+            river = river_code, river_label, age_class, sex, km, lat, lon, place, location_source,
+            rings = paste(coalesce(ring_l_top, ""), coalesce(ring_l_bottom, ""),
+                          coalesce(ring_r_top, ""), coalesce(ring_r_bottom, ""), sep = "|"))
 
 by_section <- ringing |>
   count(river, river_label, year, age_class, name = "n") |>

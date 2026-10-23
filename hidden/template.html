@@ -1,8 +1,9 @@
 <!-- Vorlage der versteckten Seite (cinclus.qmd). Enthält Layout und Texte, aber keine Daten.
-     Die Daten setzt analysis/R/04_build_page.R an der Stelle __DATA__ ein. -->
+     Die Daten setzt analysis/R/05_build_page.R an der Stelle __DATA__ ein. -->
 <div class="cinclus">
   <p class="cinclus-stamp">Entwurf · Datenstand <span data-bind="generated"></span> · Quelle: Cinclopedia</p>
 
+  <section class="cinclus-sec pcb">
   <h2>Probenahmestellen</h2>
   <p>Wo die Proben für die PCB-Analysen gesammelt wurden. Kreisgrösse = Anzahl Proben am Ort, Klick zeigt
      Gruppe, Art, Datum und Wert. Blau: Oberer Spöl, orange: Unterer Spöl, grün: Vergleichsgewässer
@@ -10,30 +11,43 @@
   <figure id="map-samples" class="cinclus-map"></figure>
 
   <h2>PCB in Wasseramsel-Eiern</h2>
-  <p>Summe der 6 Indikator-PCB pro Ei, in ng pro g Fett, nach Lage des Nests entlang des Spöl
+  <p>PCB pro Ei in ng pro g Fett, nach Lage des Nests entlang des Spöl
      (km ab Punt dal Gall). Rom liegt an einem anderen Fluss und steht darum rechts für sich.
      Die Skala ist logarithmisch: jeder Rasterschritt ist das Zehnfache. Die gestrichelte Linie ist der
-     Höchstwert für Hühnereier (40 ng/g Fett).</p>
+     Höchstwert für Hühnereier (40 ng/g Fett, gilt für die Summe der 6 iPCB). Die Kacheln beziehen sich auf die 6 iPCB.</p>
   <div class="cinclus-tiles" id="egg-tiles"></div>
   <div class="cinclus-filter">
     <label>Jahr <select id="egg-year"></select></label>
   </div>
-  <figure id="chart-eggs" class="cinclus-chart"></figure>
+  <h3 class="cinclus-metric ipcb"><span class="badge">Σ 6 iPCB</span> Indikator-PCB</h3>
+  <figure id="chart-eggs" class="cinclus-chart ipcb"></figure>
+  <h3 class="cinclus-metric dl"><span class="badge">Σ 12 dl-PCB</span> dioxinähnliche PCB</h3>
+  <p class="cinclus-note">Summe der 12 dioxinähnlichen PCB (77, 81, 105, 114, 118, 123, 126, 156, 157, 167, 169, 189),
+     ebenfalls in ng/g Fett und logarithmisch, aber mit eigener Skala. Für dl-PCB ist kein Höchstwert eingezeichnet.</p>
+  <figure id="chart-eggs-dl" class="cinclus-chart dl"></figure>
 
   <h2>PCB in der Nahrungskette</h2>
-  <p>Gleiche Einheit und Skala wie oben. Makrozoobenthos fasst Bachflohkrebse und Köcherfliegen zusammen,
+  <p>Gleiche Einheiten wie oben. Makrozoobenthos fasst Bachflohkrebse und Köcherfliegen zusammen,
      Ufer-Spinnen fassen Wolf- und Radnetzspinnen zusammen. Hohle Punkte: Wert evtl. nicht auf Fett bezogen
      (siehe offene Punkte unten).</p>
-  <figure id="chart-chain" class="cinclus-chart"></figure>
+  <h3 class="cinclus-metric ipcb"><span class="badge">Σ 6 iPCB</span> Indikator-PCB</h3>
+  <figure id="chart-chain" class="cinclus-chart ipcb"></figure>
+  <h3 class="cinclus-metric dl"><span class="badge">Σ 12 dl-PCB</span> dioxinähnliche PCB</h3>
+  <figure id="chart-chain-dl" class="cinclus-chart dl"></figure>
   <details>
     <summary>Tabelle aller PCB-Proben</summary>
     <div id="table-pcb" class="cinclus-table"></div>
   </details>
+  </section>
 
+  <section class="cinclus-sec ring">
   <h2>Besiedlung: beringte Wasseramseln</h2>
   <div class="cinclus-tiles" id="ring-tiles"></div>
+  <button type="button" id="btn-rings" class="cta cinclus-btn" aria-pressed="false">Alle Vogelringe einblenden</button>
   <figure id="map-ringing" class="cinclus-map"></figure>
-  <p class="cinclus-note">Kreisgrösse = Anzahl beringte Vögel am Ort, Klick zeigt die Namen. Blau: Oberer Spöl,
+  <div id="ring-list" class="cinclus-ringlist" hidden></div>
+  <p class="cinclus-note">Kreisgrösse = Anzahl beringte Vögel am Ort, Klick zeigt Namen und Farbringe
+     (links: linkes Bein, rechts: rechtes Bein, je oben/unten; aus Sicht des Vogels). Blau: Oberer Spöl,
      orange: Unterer Spöl, grün: Ova dal Fuorn.</p>
   <h3>Entlang des Spöl</h3>
   <p>Jeder Punkt ist ein beringter Vogel, eine Zeile pro Saison: links Punt dal Gall (Staumauer),
@@ -50,6 +64,7 @@
     <summary>Tabelle aller beringten Vögel</summary>
     <div id="table-birds" class="cinclus-table"></div>
   </details>
+  </section>
 
   <h2>Offene Punkte zu den Daten</h2>
   <ul id="notes"></ul>

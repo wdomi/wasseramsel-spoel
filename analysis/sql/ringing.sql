@@ -13,8 +13,16 @@ select
   v.distance_from_pdg_m,
   v.ringed_as,
   i.age_at_ringing,
-  sx.code as sex
+  sx.code as sex,
+  rlt.code as ring_l_top,      -- Farbringe als Kürzel (alu, yel, bla …), links/rechts aus Sicht des Vogels
+  rlb.code as ring_l_bottom,
+  rrt.code as ring_r_top,
+  rrb.code as ring_r_bottom
 from public.v_individual_location v
 join public.individual i          on i.id = v.individual_id
 left join ref.sex_categories sx   on sx.id = i.sex_id
+left join ref.rings rlt           on rlt.id = i."ring_L_t"
+left join ref.rings rlb           on rlb.id = i."ring_L_b"
+left join ref.rings rrt           on rrt.id = i."ring_R_t"
+left join ref.rings rrb           on rrb.id = i."ring_R_b"
 order by v.ringed_date

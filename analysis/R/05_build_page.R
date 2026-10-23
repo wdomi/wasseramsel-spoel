@@ -7,8 +7,9 @@
 source("R/00_setup.R")
 
 notes <- c(
-  "Werte immer als Summe 6 iPCB in ng/g Fett. Die Spalten «Frischgewicht» sind zwischen den Chargen nicht einheitlich (mal ng/g, mal pg/g) und werden darum nicht gezeigt.",
+  "Alle Werte in ng/g Fett, als Summe der 6 iPCB bzw. der 12 dl-PCB. Die Spalten «Frischgewicht» sind zwischen den Chargen nicht einheitlich (mal ng/g, mal pg/g) und werden darum nicht gezeigt.",
   "Hohle Punkte: Fischlaich 2025 sowie Köcherfliegen und Spinnen vom Oktober 2025 haben identische Fett- und Frischgewicht-Werte und einen Fettanteil von 0. Ob diese Werte auf Fett bezogen sind, ist bei der EMPA zu klären.",
+  "dl-PCB: Wo alle 12 Kongenere 0 oder leer sind (u. a. Köcherfliegen und Spinnen vom Oktober 2025), fehlt der Punkt in den dl-PCB-Grafiken.",
   "Blindwerte sind ausgeblendet. Der Blindwert 51126 (Spinnen &amp; Köcherfliegen 2026) hat eine Summe von über 82'000 ng/g Fett und ist vermutlich falsch erfasst.",
   "Zwei Proben haben laut EMPA eine «sehr schlechte Wiederfindung» (Köcherfliegen Praspöl, grosse Radnetzspinnen Unterer Spöl).",
   "Altersklassen beim Beringen sind uneinheitlich erfasst (adult/adu/1y/nestling, 0/1/2/2+/3); «Diesjährig» = Jungvogel im ersten Jahr, nicht am Nest beringt.",
