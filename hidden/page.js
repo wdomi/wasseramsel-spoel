@@ -208,6 +208,52 @@
     return { map: map, places: places, bounds: layer.getBounds() };
   }
 
+  // ---------- Probenahmekarte: eigenes Symbol pro Probengruppe ----------
+  // Platzhalter-Symbole (viewBox 0 0 32 32, gefüllt mit currentColor = Farbe des Gewässers).
+  // Eigene Symbole: SVG-Dateien in hidden/markers/ (siehe README dort) ersetzen diese automatisch.
+  var MARKERS = {
+    "Wasseramsel-Eier": '<ellipse cx="16" cy="17" rx="9" ry="12"/>',
+    "Fische": '<path d="M3 16c5-7 14-8 20-3l6-5v16l-6-5c-6 5-15 4-20-3z"/><circle cx="9" cy="14.5" r="1.6" fill="#fff"/>',
+    "Fischlaich": '<circle cx="10" cy="11" r="6"/><circle cx="22" cy="11" r="6"/><circle cx="16" cy="22" r="6"/>',
+    "Makrozoobenthos": '<path d="M16 3l13 13-13 13L3 16z"/>',
+    "Ufer-Spinnen": '<circle cx="16" cy="16" r="6"/><path d="M16 16L4 5M16 16L28 5M16 16L3 16M16 16L29 16M16 16L4 27M16 16L28 27" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"/>'
+  };
+  function markerSvg(group, color) {
+    var custom = (D.markers || {})[group];
+    var inner = custom || '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">' + MARKERS[group] + "</svg>";
+    return '<span class="cinclus-marker" style="color:' + color + '">' + inner + "</span>";
+  }
+
+  function sampleMap(el, rows) {
+    var map = L.map(el, { scrollWheelZoom: false });
+    L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
+      { maxZoom: 18, attribution: '© <a href="https://www.swisstopo.admin.ch/">swisstopo</a>' }).addTo(map);
+    var layer = L.featureGroup().addTo(map);
+    var size = 26;
+    d3.groups(rows.filter(function (d) { return d.lat != null; }), function (d) { return d.lat + "," + d.lon; })
+      .forEach(function (place) {
+        var byGroup = d3.groups(place[1], function (d) { return d.group; });
+        byGroup.forEach(function (g, i) {
+          // mehrere Gruppen am selben Ort: Symbole im Kreis um den Ort anordnen
+          var n = byGroup.length, ang = 2 * Math.PI * i / n - Math.PI / 2, r = n > 1 ? 13 : 0;
+          var list = g[1], first = list[0];
+          var icon = L.divIcon({
+            className: "", html: markerSvg(g[0], colorOf(first)), iconSize: [size, size],
+            iconAnchor: [size / 2 - r * Math.cos(ang), size / 2 - r * Math.sin(ang)]
+          });
+          L.marker([first.lat, first.lon], { icon: icon, title: g[0] + " (" + list.length + ")" })
+            .bindPopup("<b>" + g[0] + " · " + first.river_label + "</b><br>" + list.map(function (d) {
+              return d.taxon + " · " + dateDe(d.date) + " · " + fmtV(d.value) + " ng/g Σ 6 iPCB" +
+                (d.dl > 0 ? ", " + fmtV(d.dl) + " ng/g Σ 12 dl-PCB" : "");
+            }).join("<br>"), { maxWidth: 340 }).addTo(layer);
+        });
+      });
+    map.fitBounds(layer.getBounds().pad(0.1));
+    $("samples-legend").innerHTML = GROUPS.map(function (g) {
+      return '<span class="item">' + markerSvg(g, tok("--text-secondary")) + g + "</span>";
+    }).join("");
+  }
+
   // ---------- Farbringe ----------
   // Kürzel aus ref.rings; Farben wie im Ring-Finder (assets/finder.js)
   var RING_COLORS = {
@@ -235,17 +281,26 @@
     var map = m.map, el = map.getContainer();
     var pane = L.DomUtil.create("div", "cinclus-labels", el);
     var svg = d3.select(pane).append("svg");
-    var places = m.places.map(function (p) { return { birds: p[1], lat: p[1][0].lat, lon: p[1][0].lon, place: p[1][0].place }; });
+    // Reihenfolge flussabwärts: Spöl nach km ab Punt dal Gall, Ova dal Fuorn am Schluss
+    var RIVER_ORDER = { SP: 0, US: 0, OF: 1 };
+    var places = m.places.map(function (p) {
+      var f = p[1][0];
+      return { birds: p[1].slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }), lat: f.lat, lon: f.lon, place: f.place, km: f.km, river: f.river };
+    }).sort(function (a, b) {
+      return (RIVER_ORDER[a.river] || 0) - (RIVER_ORDER[b.river] || 0) || (a.km || 0) - (b.km || 0);
+    });
+    var head = function (p) {
+      return '<div class="cinclus-label-head">' + (p.place || "") + (p.km != null && p.river !== "OF" ? " · " + p.km.toFixed(1) + " km" : "") + "</div>";
+    };
     var boxes = places.map(function (p) {
       var box = L.DomUtil.create("div", "cinclus-label", pane);
-      box.innerHTML = p.birds.map(function (b) { return birdCard(b, false); }).join("");
+      box.innerHTML = head(p) + p.birds.map(function (b) { return birdCard(b, false); }).join("");
       return Object.assign({ el: box }, p);
     });
-    listEl.innerHTML = places.slice().sort(function (a, b) { return a.birds[0].river < b.birds[0].river ? -1 : a.place < b.place ? -1 : 1; })
-      .map(function (p) {
-        return '<div class="cinclus-ringlist-place"><h4>' + (p.place || "") + '</h4><div class="cinclus-ringlist-birds">' +
-          p.birds.map(function (b) { return birdCard(b, false); }).join("") + "</div></div>";
-      }).join("");
+    listEl.innerHTML = places.map(function (p) {
+      return '<div class="cinclus-ringlist-place">' + head(p) + '<div class="cinclus-ringlist-birds">' +
+        p.birds.map(function (b) { return birdCard(b, false); }).join("") + "</div></div>";
+    }).join("");
 
     var on = false, colW = 0, normalH = el.style.height;
     var wide = function () { return el.clientWidth >= 640; };
@@ -259,22 +314,13 @@
         b.el.style.width = colW + "px";
         b.w = colW; b.h = b.el.offsetHeight;
       });
-      // Seite nach Lage des Orts; ist eine Spalte zu voll, wandern die Orte nahe der Mitte hinüber
-      var left = [], right = [];
-      boxes.slice().sort(function (a, b) { return a.ax - b.ax; }).forEach(function (b) { (b.ax < size.x / 2 ? left : right).push(b); });
-      var height = function (list) { return d3.sum(list, function (b) { return b.h + gap; }); };
-      // Spalten ausgleichen: Orte nahe der Mitte wandern in die kürzere Spalte
-      while (left.length && height(left) - left[left.length - 1].h > height(right)) right.unshift(left.pop());
-      while (right.length && height(right) - right[0].h > height(left)) left.push(right.shift());
+      // Gelesen wie ein Text: linke Spalte von oben nach unten, dann rechte Spalte, flussabwärts geordnet
+      var total = d3.sum(boxes, function (b) { return b.h + gap; }), acc = 0;
+      var left = boxes.filter(function (b) { acc += b.h + gap; return acc - (b.h + gap) / 2 <= total / 2; });
+      var right = boxes.slice(left.length);
       [[left, gap], [right, size.x - colW - gap]].forEach(function (side) {
-        var list = side[0].sort(function (a, b) { return a.ay - b.ay; });
         var y = gap;
-        list.forEach(function (b) { b.x = side[1]; b.y = Math.max(y, b.ay - b.h / 2); y = b.y + b.h + gap; });
-        var bottom = size.y - gap;
-        for (var i = list.length - 1; i >= 0; i--) {
-          list[i].y = Math.max(gap, Math.min(list[i].y, bottom - list[i].h));
-          bottom = list[i].y - gap;
-        }
+        side[0].forEach(function (b) { b.x = side[1]; b.y = y; y += b.h + gap; });
       });
       boxes.forEach(function (b) { b.el.style.transform = "translate(" + b.x + "px," + b.y + "px)"; });
       svg.attr("width", size.x).attr("height", size.y).selectAll("line").data(boxes).join("line")
@@ -299,7 +345,7 @@
         var need = 0;
         if (on && wide()) {
           boxes.forEach(function (b) { b.el.style.width = colW + "px"; });
-          need = d3.sum(boxes, function (b) { return b.el.offsetHeight + 4; }) / 2 + 60;
+          need = d3.sum(boxes, function (b) { return b.el.offsetHeight + 4; }) / 2 + d3.max(boxes, function (b) { return b.el.offsetHeight; }) + 12;
         }
         el.style.height = on && wide() ? Math.max(560, Math.ceil(need)) + "px" : normalH;
         if (on && wide()) map.removeControl(map.zoomControl); else map.zoomControl.addTo(map);
@@ -315,8 +361,7 @@
     root.querySelector("[data-bind=no-coords]").textContent = missing.length
       ? "Ohne Koordinaten und darum nicht auf der Karte: " + missing.map(function (m) { return m[0] + " (" + m[1] + ")"; }).join(", ") + "."
       : "";
-    pointMap($("map-samples"), samples, function (d) { return d.river_label + (d.km != null && d.river !== "RO" ? " · " + d.km.toFixed(1) + " km" : ""); },
-      function (d) { return d.group + " · " + d.taxon + " · " + dateDe(d.date) + " · " + fmtDe(d.value) + " ng/g (Σ 6 iPCB)"; });
+    sampleMap($("map-samples"), samples);
     var ringMap = pointMap($("map-ringing"), birds, function (d) { return d.place || ""; },
       function (b) { return birdCard(b, true); });
     var labels = ringLabels(ringMap, $("ring-list"));

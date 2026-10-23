@@ -43,7 +43,7 @@
 .cinclus-bird .rings { display: grid; grid-template-columns: auto auto; gap: 2px 6px; justify-content: start; font-size: .68rem; margin-top: 2px; }
 .cinclus-bird .pill { display: inline-block; padding: 0 4px; border-radius: 3px; min-width: 2rem; text-align: center; }
 .cinclus-label .cinclus-bird { margin: 0; }
-.cinclus-ringlist-place h4 { font-size: .9rem; margin: .75rem 0 .25rem; }
+.cinclus-ringlist-place .cinclus-label-head { margin-top: .75rem; }
 .cinclus-ringlist-birds { display: flex; flex-wrap: wrap; gap: 6px 14px; }
 
 /* Abschnitte: PCB weiss, Beringung creme */
@@ -60,3 +60,11 @@
 .cinclus-metric.dl .badge { background: #8a5a2b; }
 .cinclus-chart.ipcb { border-left: 4px solid #2f5d62; padding-left: .5rem; }
 .cinclus-chart.dl { border-left: 4px solid #8a5a2b; padding-left: .5rem; }
+
+/* Probenahmekarte: Symbole pro Probengruppe */
+.cinclus-marker { display: block; width: 26px; height: 26px; filter: drop-shadow(0 0 1.5px #fff) drop-shadow(0 0 1px #fff); }
+.cinclus-marker svg { width: 100%; height: 100%; fill: currentColor; display: block; }
+.cinclus-symbols { display: flex; flex-wrap: wrap; gap: .4rem 1.2rem; font-size: .85rem; color: var(--text-secondary); margin: .25rem 0 1rem; }
+.cinclus-symbols .item { display: inline-flex; align-items: center; gap: .35rem; }
+.cinclus-symbols .cinclus-marker { width: 20px; height: 20px; }
+.cinclus-label-head { flex-basis: 100%; font-size: .72rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid #ddd; padding-bottom: 1px; }
