@@ -25,11 +25,13 @@ ringing <- ring_raw |>
     year = as.integer(format(ringed_date, "%Y")),
     season = ifelse(as.integer(format(ringed_date, "%m")) <= 7, "Brutzeit", "Herbst"),
     km = round(distance_from_pdg_m / 1000, 2),
-    place = coalesce(nest_display_name, transect)
+    place = coalesce(nest_display_name, transect),
+    # «US06 - Barcli - 54» -> «US06 Barcli»: ein Kasten pro Transekt bei «Alle Vogelringe»
+    transect = sub("\\s*-\\s*\\d+$", "", sub("^(\\S+?)\\s*-\\s*", "\\1 ", transect))
   ) |>
   left_join(rivers, by = c("river_code" = "river")) |>
   transmute(id = individual_id, name, date = as.character(ringed_date), year, season,
-            river = river_code, river_label, age_class, sex, km, lat, lon, place, location_source,
+            river = river_code, river_label, age_class, sex, km, lat, lon, place, transect, location_source,
             rings = paste(coalesce(ring_l_top, ""), coalesce(ring_l_bottom, ""),
                           coalesce(ring_r_top, ""), coalesce(ring_r_bottom, ""), sep = "|"))
 

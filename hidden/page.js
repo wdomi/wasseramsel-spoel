@@ -309,9 +309,16 @@
     var svg = d3.select(pane).append("svg");
     // Reihenfolge flussabwärts: Spöl nach km ab Punt dal Gall, Ova dal Fuorn am Schluss
     var RIVER_ORDER = { SP: 0, US: 0, OF: 1 };
-    var places = m.places.map(function (p) {
-      var f = p[1][0];
-      return { birds: p[1].slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }), lat: f.lat, lon: f.lon, place: f.place, km: f.km, river: f.river };
+    // ein Kasten pro Transekt (mehrere Nester/Orte eines Transekts zusammen), Linien zu jedem Ort
+    var withPos = [].concat.apply([], m.places.map(function (p) { return p[1]; }));
+    var places = d3.groups(withPos, function (b) { return b.transect || b.place || ""; }).map(function (g) {
+      var list = g[1];
+      var spots = d3.groups(list, function (b) { return b.lat + "," + b.lon; }).map(function (s) { return { lat: s[1][0].lat, lon: s[1][0].lon }; });
+      return {
+        birds: list.slice().sort(function (a, b) { return a.date < b.date ? -1 : 1; }),
+        spots: spots, lat: d3.mean(spots, function (s) { return s.lat; }), lon: d3.mean(spots, function (s) { return s.lon; }),
+        place: g[0], km: d3.min(list, function (b) { return b.km; }), river: list[0].river
+      };
     }).sort(function (a, b) {
       return (RIVER_ORDER[a.river] || 0) - (RIVER_ORDER[b.river] || 0) || (a.km || 0) - (b.km || 0);
     });
@@ -337,6 +344,7 @@
       boxes.forEach(function (b) {
         var pt = map.latLngToContainerPoint([b.lat, b.lon]);
         b.ax = pt.x; b.ay = pt.y;
+        b.pts = b.spots.map(function (s) { return map.latLngToContainerPoint([s.lat, s.lon]); });
         b.el.style.width = colW + "px";
         b.w = colW; b.h = b.el.offsetHeight;
       });
@@ -349,10 +357,11 @@
         side[0].forEach(function (b) { b.x = side[1]; b.y = y; y += b.h + gap; });
       });
       boxes.forEach(function (b) { b.el.style.transform = "translate(" + b.x + "px," + b.y + "px)"; });
-      svg.attr("width", size.x).attr("height", size.y).selectAll("line").data(boxes).join("line")
-        .attr("x1", function (b) { return b.ax; }).attr("y1", function (b) { return b.ay; })
-        .attr("x2", function (b) { return b.x < size.x / 2 ? b.x + b.w : b.x; })
-        .attr("y2", function (b) { return Math.max(b.y + 6, Math.min(b.ay, b.y + b.h - 6)); });
+      var links = [].concat.apply([], boxes.map(function (b) { return b.pts.map(function (p) { return { b: b, p: p }; }); }));
+      svg.attr("width", size.x).attr("height", size.y).selectAll("line").data(links).join("line")
+        .attr("x1", function (l) { return l.p.x; }).attr("y1", function (l) { return l.p.y; })
+        .attr("x2", function (l) { return l.b.x < size.x / 2 ? l.b.x + l.b.w : l.b.x; })
+        .attr("y2", function (l) { return Math.max(l.b.y + 6, Math.min(l.b.ay, l.b.y + l.b.h - 6)); });
     }
 
     function fit() {
