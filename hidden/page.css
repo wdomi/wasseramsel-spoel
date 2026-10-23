@@ -12,6 +12,9 @@
 .cinclus h2 { margin-top: 2.5rem; }
 .cinclus-chart { margin: .5rem 0 1.5rem; overflow-x: auto; }
 .cinclus-chart svg { max-width: 100%; height: auto; }
+.cinclus-row { display: flex; align-items: flex-start; gap: 8px; }
+.cinclus-row svg { max-width: none; }
+.cinclus-row > *:first-child { flex: 1 1 auto; min-width: 0; }
 .cinclus-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 1rem 1.5rem; }
 .cinclus-grid h4 { font-size: 1rem; margin: 0 0 .25rem; }
 .cinclus-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin: 1rem 0; }

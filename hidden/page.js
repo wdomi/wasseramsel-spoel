@@ -71,27 +71,63 @@
   var years = Array.from(new Set(eggs.map(function (d) { return d.year; }))).sort();
   yearSel.innerHTML = '<option value="">alle</option>' + years.map(function (y) { return "<option>" + y + "</option>"; }).join("");
 
+  // Spöl-Eier entlang des Flusses (km ab Punt dal Gall), Rom als eigener Abschnitt rechts.
+  // Mehrere Eier aus demselben Nest liegen auf derselben Distanz und werden leicht nebeneinander gesetzt.
+  function spread(data, step) {
+    var seen = {};
+    data.forEach(function (d) { (seen[d.km] = seen[d.km] || []).push(d); });
+    return data.map(function (d) {
+      var g = seen[d.km], i = g.indexOf(d);
+      return Object.assign({ xk: d.km + (i - (g.length - 1) / 2) * step }, d);
+    });
+  }
+
   function drawEggs() {
     var el = $("chart-eggs");
     var y = yearSel.value;
     var data = eggs.filter(function (d) { return !y || String(d.year) === y; });
-    el.replaceChildren(Plot.plot(Object.assign({}, common, {
-      width: width(el), height: 220,
-      x: Object.assign({}, xLog, { domain: [10, 100000] }),
-      y: { axis: null },
-      color: riverColor,
+    var spoel = spread(data.filter(function (d) { return d.river !== "RO" && d.km != null; }), 0.09);
+    var rom = data.filter(function (d) { return d.river === "RO"; }).map(function (d, i, a) {
+      return Object.assign({ xr: (i - (a.length - 1) / 2) * 0.35 }, d);
+    });
+    var yScale = { type: "log", domain: [20, 100000], label: "↑ Summe 6 iPCB (ng/g Fett)", grid: true, tickFormat: fmtDe };
+    var limitRule = Plot.ruleY([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" });
+    var dot = function (rows, x) {
+      return Plot.dot(rows, Object.assign({
+        x: x, y: "value", fill: key, r: 5, stroke: tok("--surface-1"), strokeWidth: 1.5,
+        channels: Object.assign({ km: "km" }, tipPcb.channels),
+        tip: { format: { x: false, y: function (v) { return fmtDe(v) + " ng/g"; }, fill: false, km: function (v) { return v == null ? "" : v + " km"; } } }
+      }));
+    };
+    var total = width(el), romW = total < 500 ? 80 : 130, mainW = Math.max(200, total - romW - 8);
+    var main = Plot.plot(Object.assign({}, common, {
+      width: mainW, height: 320, marginLeft: 60, marginTop: 28, marginBottom: 40,
+      x: { domain: [0, 13.5], label: "km ab Punt dal Gall (Staumauer) →", grid: true },
+      y: yScale,
+      color: { domain: KEYS, range: KEY_COLORS },
       marks: [
-        Plot.ruleX([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" }),
-        Plot.text([D.pcb.limit], { x: function (d) { return d; }, text: function () { return "Hühnerei-Höchstwert"; },
-          frameAnchor: "top", facetAnchor: "top", dy: -12, dx: 4, textAnchor: "start", fill: tok("--text-secondary"), fontSize: 11 }),
-        Plot.dot(data, Plot.dodgeY(Object.assign({
-          x: "value", fy: "river_label", fill: key, r: 5, anchor: "middle",
-          stroke: tok("--surface-1"), strokeWidth: 1.5, tip: { format: tipPcb.format }
-        }, { channels: tipPcb.channels })))
-      ],
-      fy: { domain: RIVERS.slice(0, 3), label: null },
-      marginTop: 18
-    })));
+        limitRule,
+        Plot.text(["Hühnerei-Höchstwert"], { x: 13.5, y: D.pcb.limit, dy: -8, textAnchor: "end", fill: tok("--text-secondary"), fontSize: 11 }),
+        Plot.text([{ x: 3, t: "Oberer Spöl" }, { x: 11, t: "Unterer Spöl" }], { x: "x", text: "t", frameAnchor: "top", dy: 10, fill: tok("--text-secondary"), fontWeight: 600 }),
+        dot(spoel, "xk")
+      ]
+    }));
+    var side = Plot.plot(Object.assign({}, common, {
+      width: romW, height: 320, marginLeft: 10, marginRight: 10, marginTop: 28, marginBottom: 40,
+      x: { domain: [-1, 1], axis: null },
+      y: Object.assign({}, yScale, { axis: null }),
+      color: { domain: KEYS, range: KEY_COLORS },
+      marks: [
+        limitRule,
+        Plot.text(["Rom"], { frameAnchor: "top", dy: 10, fill: tok("--text-secondary"), fontWeight: 600 }),
+        Plot.frame({ anchor: "left", stroke: tok("--grid") }),
+        dot(rom, "xr")
+      ]
+    }));
+    var row = document.createElement("div");
+    row.className = "cinclus-row";
+    row.append(main, side);
+    el.replaceChildren(Plot.legend({ color: riverColor }), row);
   }
   yearSel.addEventListener("change", drawEggs);
 

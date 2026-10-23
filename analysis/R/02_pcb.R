@@ -47,6 +47,7 @@ pcb_show <- pcb |>
     id = sample_id, label, group, group_order, sample_type,
     taxon = name_de, river, river_label, river_role,
     date = as.character(date_collected), year,
+    km = round(distance_from_pdg_m / 1000, 2),   # entlang Spöl ab Punt dal Gall; für Rom nicht sinnvoll
     value = round(sum_6_ipcb_fat, 1),          # Summe 6 iPCB, ng/g Fett
     factor = round(sum_6_ipcb_fat / limit_chicken_egg),
     unit_uncertain, poor_recovery
