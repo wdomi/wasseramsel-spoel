@@ -16,6 +16,9 @@
   var key = function (d) { return d.river === "SP" || d.river === "US" ? d.river_label : "Vergleichsgewässer"; };
   var colorOf = function (d) { return KEY_COLORS[KEYS.indexOf(key(d))] || tok("--text-muted"); };
   var riverColor = { legend: true, domain: KEYS, range: KEY_COLORS };
+  // Beringt wurde nur am Spöl und an der Ova dal Fuorn: dort die Gewässer direkt beschriften.
+  var RING_RIVERS = ["Oberer Spöl", "Unterer Spöl", "Ova dal Fuorn"];
+  var ringColor = { legend: true, domain: RING_RIVERS, range: KEY_COLORS };
   var AGE = ["Adult", "Diesjährig", "Nestling", "Unbekannt"];
   var AGE_SYMBOLS = ["circle", "triangle", "square", "diamond"];
 
@@ -171,6 +174,7 @@
     { value: birds.length, label: "Wasseramseln beringt" },
     { value: count(function (d) { return d.river === "SP"; }), label: "Oberer Spöl", color: KEY_COLORS[0] },
     { value: count(function (d) { return d.river === "US"; }), label: "Unterer Spöl", color: KEY_COLORS[1] },
+    { value: count(function (d) { return d.river === "OF"; }), label: "Ova dal Fuorn", color: KEY_COLORS[2] },
     { value: count(function (d) { return d.age_class === "Nestling"; }), label: "davon als Nestling" }
   ]);
 
@@ -236,10 +240,10 @@
       width: width(el), height: 240, marginLeft: 40,
       x: { domain: order, label: null },
       y: { label: "Vögel", grid: true },
-      color: riverColor,
+      color: ringColor,
       marks: [
         Plot.barY(data, Plot.groupX({ y: "count" }, {
-          x: "saison", fill: key, stroke: tok("--surface-1"), strokeWidth: 2, inset: 2, tip: true
+          x: "saison", fill: "river_label", stroke: tok("--surface-1"), strokeWidth: 2, inset: 2, tip: true
         })),
         Plot.ruleY([0])
       ]
