@@ -247,7 +247,7 @@
   function markerSvg(group, color) {
     var custom = (D.markers || {})[group];
     var inner = custom || '<svg viewBox="0 0 32 32" xmlns="http://www.w3.org/2000/svg">' + MARKERS[group] + "</svg>";
-    return '<span class="cinclus-marker" style="color:' + color + '">' + inner + "</span>";
+    return '<span class="cinclus-marker" data-g="' + group + '" style="color:' + color + '">' + inner + "</span>";
   }
 
   function sampleMap(el, rows) {
@@ -255,13 +255,13 @@
     L.tileLayer("https://wmts.geo.admin.ch/1.0.0/ch.swisstopo.pixelkarte-farbe/default/current/3857/{z}/{x}/{y}.jpeg",
       { maxZoom: 18, attribution: '© <a href="https://www.swisstopo.admin.ch/">swisstopo</a>' }).addTo(map);
     var layer = L.featureGroup().addTo(map);
-    var size = 26;
+    var size = 32;
     d3.groups(rows.filter(function (d) { return d.lat != null; }), function (d) { return d.lat + "," + d.lon; })
       .forEach(function (place) {
         var byGroup = d3.groups(place[1], function (d) { return d.group; });
         byGroup.forEach(function (g, i) {
           // mehrere Gruppen am selben Ort: Symbole im Kreis um den Ort anordnen
-          var n = byGroup.length, ang = 2 * Math.PI * i / n - Math.PI / 2, r = n > 1 ? 13 : 0;
+          var n = byGroup.length, ang = 2 * Math.PI * i / n - Math.PI / 2, r = n > 1 ? 16 : 0;
           var list = g[1], first = list[0];
           var icon = L.divIcon({
             className: "", html: markerSvg(g[0], colorOf(first)), iconSize: [size, size],
