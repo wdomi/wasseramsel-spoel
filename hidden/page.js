@@ -428,24 +428,35 @@
   function drawTransects() {
     var el = $("chart-transects");
     var cells = O.cells;
-    var rows = Array.from(new Set(cells.map(function (c) { return c.transect; })));
+    var cols = O.transects.map(function (t) { return t.transect_code; });
+    var nameOf = {}, riverOf = {};
+    O.transects.forEach(function (t) { nameOf[t.transect_code] = t.transect; riverOf[t.transect_code] = t.river; });
+    // ganzes Raster als leere Zellen, damit Transekte ohne Beobachtungen sichtbar bleiben
+    var grid = d3.cross(cols, O.months).map(function (p) { return { transect_code: p[0], month: p[1] }; });
+    var heads = ["SP", "US", "RO"].map(function (r) {
+      var c = cols.filter(function (k) { return riverOf[k] === r; });
+      return { river: r, x: c[Math.floor((c.length - 1) / 2)], label: { SP: "Oberer Spöl", US: "Unterer Spöl", RO: "Rom" }[r] };
+    }).filter(function (h) { return h.x; });
     var max = d3.max(cells, function (c) { return c.n; });
     el.replaceChildren(Plot.plot(Object.assign({}, common, {
-      width: Math.max(640, width(el)), height: 70 + 24 * rows.length,
-      marginLeft: 150, marginBottom: 40,
-      x: { domain: O.months, tickFormat: monthLabel, label: null, tickRotate: -45, padding: 0.06 },
-      y: { domain: rows, label: null, padding: 0.06 },
+      width: Math.max(760, width(el)), height: 90 + 22 * O.months.length,
+      marginLeft: 56, marginTop: 40, marginBottom: 50,
+      x: { domain: cols, label: null, tickRotate: -90, padding: 0.08, axis: "bottom" },
+      y: { domain: O.months, tickFormat: monthLabel, label: null, padding: 0.08 },
       color: { type: "linear", domain: [0, max], range: ["#cde2fb", "#104281"], legend: true, label: "Beobachtungen" },
       marks: [
+        Plot.cell(grid, { x: "transect_code", y: "month", fill: "#e9e7e0", fillOpacity: 0.7, rx: 2 }),
         Plot.cell(cells, {
-          x: "month", y: "transect", fill: "n", rx: 3,
-          channels: { Vögel: "birds", Beringungen: "ringing", Fänge: "catch", Ablesungen: "resight", Unberingt: "unringed" },
-          tip: { format: { x: monthLabel, y: true, fill: true } }
+          x: "transect_code", y: "month", fill: "n", rx: 3,
+          channels: { Transekt: "transect", Vögel: "birds", Beringungen: "ringing", Fänge: "catch", Ablesungen: "resight", Unberingt: "unringed" },
+          tip: { format: { x: false, y: monthLabel, fill: true } }
         }),
         Plot.text(cells, {
-          x: "month", y: "transect", text: "n", fontSize: 11,
+          x: "transect_code", y: "month", text: "n", fontSize: 10,
           fill: function (c) { return c.n > max / 2 ? "white" : tok("--text-primary"); }
-        })
+        }),
+        Plot.text(heads, { x: "x", text: "label", frameAnchor: "top", dy: -28, fontWeight: 600, fontSize: 12,
+          fill: function (h) { return h.river === "RO" ? KEY_COLORS[2] : h.river === "US" ? KEY_COLORS[1] : KEY_COLORS[0]; } })
       ]
     })));
   }
