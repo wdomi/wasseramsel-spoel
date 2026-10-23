@@ -24,8 +24,9 @@
 
   var fmt = d3.format(",.0f");
   var fmtDe = function (v) { return fmt(v).replace(/,/g, "'"); };
+  var fmtV = function (v) { return v < 10 ? d3.format(".2~f")(v) : fmtDe(v); };   // Messwerte, auch < 1
   var dateDe = function (s) { return s ? s.slice(8, 10) + "." + s.slice(5, 7) + "." + s.slice(0, 4) : ""; };
-  var width = function (el) { return Math.max(320, el.clientWidth || 640); };
+  var width = function (el) { return Math.max(300, (el.clientWidth || 640) - 16); };
   var $ = function (id) { return document.getElementById(id); };
 
   root.querySelectorAll("[data-bind=generated]").forEach(function (el) { el.textContent = dateDe(D.generated); });
@@ -34,10 +35,10 @@
     style: { fontSize: "13px", color: tok("--text-primary"), background: "transparent" },
     marginLeft: 120
   };
-  var xLog = { type: "log", label: "Summe 6 iPCB (ng/g Fett) →", grid: true, tickFormat: fmtDe };
+  var xLog = { type: "log", grid: true, tickFormat: fmtV };
   var tipPcb = {
     channels: { Probe: "label", Datum: function (d) { return dateDe(d.date); }, Gewässer: "river_label" },
-    format: { x: function (v) { return fmtDe(v) + " ng/g"; }, y: false, stroke: false, fill: false }
+    format: { x: function (v) { return fmtV(v) + " ng/g"; }, y: false, stroke: false, fill: false }
   };
 
   function tiles(el, items) {
@@ -85,21 +86,30 @@
     });
   }
 
-  function drawEggs() {
-    var el = $("chart-eggs");
+  // Zwei Kenngrössen, je eigene Grafiken: Summe 6 Indikator-PCB und Summe 12 dioxinähnliche PCB
+  var IPCB = { field: "value", label: "Summe 6 iPCB (ng/g Fett)", limit: true };
+  var DLPCB = { field: "dl", label: "Summe 12 dl-PCB (ng/g Fett)", limit: false };
+  var has = function (metric) { return function (d) { return d[metric.field] > 0; }; };
+  function logDomain(rows, metric) {
+    var e = d3.extent(rows.filter(has(metric)), function (d) { return d[metric.field]; });
+    var lo = Math.pow(10, Math.floor(Math.log10(e[0]))), hi = Math.pow(10, Math.ceil(Math.log10(e[1])));
+    return metric.limit ? [Math.min(lo, 20), hi] : [lo, hi];
+  }
+
+  function drawEggs(el, metric) {
     var y = yearSel.value;
-    var data = eggs.filter(function (d) { return !y || String(d.year) === y; });
+    var data = eggs.filter(function (d) { return (!y || String(d.year) === y) && has(metric)(d); });
     var spoel = spread(data.filter(function (d) { return d.river !== "RO" && d.km != null; }), 0.09);
     var rom = data.filter(function (d) { return d.river === "RO"; }).map(function (d, i, a) {
       return Object.assign({ xr: (i - (a.length - 1) / 2) * 0.35 }, d);
     });
-    var yScale = { type: "log", domain: [20, 100000], label: "↑ Summe 6 iPCB (ng/g Fett)", grid: true, tickFormat: fmtDe };
-    var limitRule = Plot.ruleY([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" });
+    var yScale = { type: "log", domain: logDomain(eggs, metric), label: "↑ " + metric.label, grid: true, tickFormat: fmtV };
+    var limitRule = metric.limit ? Plot.ruleY([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" }) : null;
     var dot = function (rows, x) {
       return Plot.dot(rows, Object.assign({
-        x: x, y: "value", fill: key, r: 5, stroke: tok("--surface-1"), strokeWidth: 1.5,
+        x: x, y: metric.field, fill: key, r: 5, stroke: tok("--surface-1"), strokeWidth: 1.5,
         channels: Object.assign({ km: "km" }, tipPcb.channels),
-        tip: { format: { x: false, y: function (v) { return fmtDe(v) + " ng/g"; }, fill: false, km: function (v) { return v == null ? "" : v + " km"; } } }
+        tip: { format: { x: false, y: function (v) { return fmtV(v) + " ng/g"; }, fill: false, km: function (v) { return v == null ? "" : v + " km"; } } }
       }));
     };
     var total = width(el), romW = total < 500 ? 80 : 130, mainW = Math.max(200, total - romW - 8);
@@ -110,7 +120,7 @@
       color: { domain: KEYS, range: KEY_COLORS },
       marks: [
         limitRule,
-        Plot.text(["Hühnerei-Höchstwert"], { x: 13.5, y: D.pcb.limit, dy: -8, textAnchor: "end", fill: tok("--text-secondary"), fontSize: 11 }),
+        metric.limit ? Plot.text(["Hühnerei-Höchstwert"], { x: 13.5, y: D.pcb.limit, dy: -8, textAnchor: "end", fill: tok("--text-secondary"), fontSize: 11 }) : null,
         Plot.text([{ x: 3, t: "Oberer Spöl" }, { x: 11, t: "Unterer Spöl" }], { x: "x", text: "t", frameAnchor: "top", dy: 10, fill: tok("--text-secondary"), fontWeight: 600 }),
         dot(spoel, "xk")
       ]
@@ -132,26 +142,27 @@
     row.append(main, side);
     el.replaceChildren(Plot.legend({ color: riverColor }), row);
   }
-  yearSel.addEventListener("change", drawEggs);
+  function drawEggCharts() { drawEggs($("chart-eggs"), IPCB); drawEggs($("chart-eggs-dl"), DLPCB); }
+  yearSel.addEventListener("change", drawEggCharts);
 
   // ---------- PCB: Nahrungskette ----------
   var GROUPS = ["Makrozoobenthos", "Ufer-Spinnen", "Fischlaich", "Fische", "Wasseramsel-Eier"];
 
-  function drawChain() {
-    var el = $("chart-chain");
+  function drawChain(el, metric) {
+    var data = samples.filter(has(metric));
     el.replaceChildren(Plot.plot(Object.assign({}, common, {
       width: width(el), height: 320,
-      x: Object.assign({}, xLog, { domain: [10, 100000] }),
+      x: Object.assign({}, xLog, { domain: logDomain(samples, metric), label: metric.label + " →" }),
       y: { domain: GROUPS.slice().reverse(), label: null },
       color: riverColor,
       marks: [
-        Plot.ruleX([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" }),
-        Plot.dot(samples, {
-          x: "value", y: "group",
+        metric.limit ? Plot.ruleX([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" }) : null,
+        Plot.dot(data, {
+          x: metric.field, y: "group",
           stroke: key, r: 5, strokeWidth: 2, fill: key,
           fillOpacity: function (d) { return d.unit_uncertain ? 0 : 0.85; }
         }),
-        Plot.tip(samples, Plot.pointer(Object.assign({ x: "value", y: "group" }, tipPcb)))
+        Plot.tip(data, Plot.pointer(Object.assign({ x: metric.field, y: "group" }, tipPcb)))
       ]
     })));
   }
@@ -162,7 +173,8 @@
     ["Probe", function (d) { return d.label; }],
     ["Gewässer", function (d) { return d.river_label; }],
     ["Datum", function (d) { return dateDe(d.date); }],
-    ["ng/g Fett", function (d) { return d.value; }],
+    ["Σ 6 iPCB (ng/g Fett)", function (d) { return d.value; }],
+    ["Σ 12 dl-PCB (ng/g Fett)", function (d) { return d.dl == null ? "" : d.dl < 10 ? d.dl.toFixed(2) : d.dl; }],
     ["× Hühnerei", function (d) { return d.factor; }],
     ["Hinweis", function (d) { return [d.unit_uncertain ? "Einheit unsicher" : "", d.poor_recovery ? "schlechte Wiederfindung" : ""].filter(Boolean).join(", "); }]
   ]);
@@ -189,10 +201,113 @@
     places.forEach(function (p) {
       var list = p[1], first = list[0];
       L.circleMarker([first.lat, first.lon], {
-        radius: 5 + 3 * Math.sqrt(list.length), color: "#fff", weight: 2, fillColor: colorOf(first), fillOpacity: 0.85
-      }).bindPopup("<b>" + title(first) + "</b><br>" + list.map(line).join("<br>")).addTo(layer);
+        radius: 4 + 2.5 * Math.sqrt(list.length), color: "#fff", weight: 2, fillColor: colorOf(first), fillOpacity: 0.85
+      }).bindPopup("<b>" + title(first) + "</b><br>" + list.map(line).join(""), { maxWidth: 320 }).addTo(layer);
     });
     map.fitBounds(layer.getBounds().pad(0.1));
+    return { map: map, places: places, bounds: layer.getBounds() };
+  }
+
+  // ---------- Farbringe ----------
+  // Kürzel aus ref.rings; Farben wie im Ring-Finder (assets/finder.js)
+  var RING_COLORS = {
+    alu: "#808080", whi: "#eee", red: "#e22c22", yel: "#d6a51c", gre: "#227722", blu: "#4b77b8",
+    vio: "#6e009e", ros: "#f58ac7", pin: "#e6007e", bro: "#a0672d", bla: "#222", bln: "#222"
+  };
+  function pill(code) {
+    if (!code || !RING_COLORS[code]) return '<span class="pill" style="background:#f1f1f1;color:#999">–</span>';
+    var text = code === "whi" || code === "ros" ? "#000" : "#fff";
+    return '<span class="pill" style="background:' + RING_COLORS[code] + ";color:" + text + '">' + code + "</span>";
+  }
+  // Reihenfolge in `rings`: links oben | links unten | rechts oben | rechts unten (aus Sicht des Vogels)
+  function ringGrid(b) {
+    var r = (b.rings || "|||").split("|");
+    return '<span class="rings">' + pill(r[0]) + pill(r[2]) + pill(r[1]) + pill(r[3]) + "</span>";
+  }
+  function birdCard(b, details) {
+    return '<div class="cinclus-bird"><b>' + b.name + "</b>" +
+      (details ? ' <span class="d">' + dateDe(b.date) + " · " + b.age_class + "</span>" : "") + ringGrid(b) + "</div>";
+  }
+
+  // Alle Ringkombinationen: auf breiten Bildschirmen als Kästchen in zwei Spalten links und rechts der Karte,
+  // je mit einer Linie zum Ort (so überdecken sie sich nicht); auf schmalen Bildschirmen als Liste unter der Karte.
+  function ringLabels(m, listEl) {
+    var map = m.map, el = map.getContainer();
+    var pane = L.DomUtil.create("div", "cinclus-labels", el);
+    var svg = d3.select(pane).append("svg");
+    var places = m.places.map(function (p) { return { birds: p[1], lat: p[1][0].lat, lon: p[1][0].lon, place: p[1][0].place }; });
+    var boxes = places.map(function (p) {
+      var box = L.DomUtil.create("div", "cinclus-label", pane);
+      box.innerHTML = p.birds.map(function (b) { return birdCard(b, false); }).join("");
+      return Object.assign({ el: box }, p);
+    });
+    listEl.innerHTML = places.slice().sort(function (a, b) { return a.birds[0].river < b.birds[0].river ? -1 : a.place < b.place ? -1 : 1; })
+      .map(function (p) {
+        return '<div class="cinclus-ringlist-place"><h4>' + (p.place || "") + '</h4><div class="cinclus-ringlist-birds">' +
+          p.birds.map(function (b) { return birdCard(b, false); }).join("") + "</div></div>";
+      }).join("");
+
+    var on = false, colW = 0, normalH = el.style.height;
+    var wide = function () { return el.clientWidth >= 640; };
+
+    function layout() {
+      if (!on || !wide()) return;
+      var size = map.getSize(), gap = 4;
+      boxes.forEach(function (b) {
+        var pt = map.latLngToContainerPoint([b.lat, b.lon]);
+        b.ax = pt.x; b.ay = pt.y;
+        b.el.style.width = colW + "px";
+        b.w = colW; b.h = b.el.offsetHeight;
+      });
+      // Seite nach Lage des Orts; ist eine Spalte zu voll, wandern die Orte nahe der Mitte hinüber
+      var left = [], right = [];
+      boxes.slice().sort(function (a, b) { return a.ax - b.ax; }).forEach(function (b) { (b.ax < size.x / 2 ? left : right).push(b); });
+      var height = function (list) { return d3.sum(list, function (b) { return b.h + gap; }); };
+      // Spalten ausgleichen: Orte nahe der Mitte wandern in die kürzere Spalte
+      while (left.length && height(left) - left[left.length - 1].h > height(right)) right.unshift(left.pop());
+      while (right.length && height(right) - right[0].h > height(left)) left.push(right.shift());
+      [[left, gap], [right, size.x - colW - gap]].forEach(function (side) {
+        var list = side[0].sort(function (a, b) { return a.ay - b.ay; });
+        var y = gap;
+        list.forEach(function (b) { b.x = side[1]; b.y = Math.max(y, b.ay - b.h / 2); y = b.y + b.h + gap; });
+        var bottom = size.y - gap;
+        for (var i = list.length - 1; i >= 0; i--) {
+          list[i].y = Math.max(gap, Math.min(list[i].y, bottom - list[i].h));
+          bottom = list[i].y - gap;
+        }
+      });
+      boxes.forEach(function (b) { b.el.style.transform = "translate(" + b.x + "px," + b.y + "px)"; });
+      svg.attr("width", size.x).attr("height", size.y).selectAll("line").data(boxes).join("line")
+        .attr("x1", function (b) { return b.ax; }).attr("y1", function (b) { return b.ay; })
+        .attr("x2", function (b) { return b.x < size.x / 2 ? b.x + b.w : b.x; })
+        .attr("y2", function (b) { return Math.max(b.y + 6, Math.min(b.ay, b.y + b.h - 6)); });
+    }
+
+    function fit() {
+      var pad = on && wide() ? colW + 24 : 10;
+      map.fitBounds(m.bounds, { paddingTopLeft: [pad, 20], paddingBottomRight: [pad, 20] });
+    }
+
+    map.on("move zoom resize", layout);
+    return {
+      show: function (v) {
+        on = v;
+        colW = Math.min(280, Math.round(el.clientWidth * 0.33));
+        pane.style.display = on && wide() ? "" : "none";
+        listEl.hidden = !(on && !wide());
+        // Karte so hoch machen, dass beide Spalten Platz haben
+        var need = 0;
+        if (on && wide()) {
+          boxes.forEach(function (b) { b.el.style.width = colW + "px"; });
+          need = d3.sum(boxes, function (b) { return b.el.offsetHeight + 4; }) / 2 + 60;
+        }
+        el.style.height = on && wide() ? Math.max(560, Math.ceil(need)) + "px" : normalH;
+        if (on && wide()) map.removeControl(map.zoomControl); else map.zoomControl.addTo(map);
+        map.invalidateSize();
+        fit();
+        layout();
+      }
+    };
   }
 
   function drawMaps() {
@@ -201,9 +316,19 @@
       ? "Ohne Koordinaten und darum nicht auf der Karte: " + missing.map(function (m) { return m[0] + " (" + m[1] + ")"; }).join(", ") + "."
       : "";
     pointMap($("map-samples"), samples, function (d) { return d.river_label + (d.km != null && d.river !== "RO" ? " · " + d.km.toFixed(1) + " km" : ""); },
-      function (d) { return d.group + " · " + d.taxon + " · " + dateDe(d.date) + " · " + fmtDe(d.value) + " ng/g"; });
-    pointMap($("map-ringing"), birds, function (d) { return d.place || ""; },
-      function (b) { return b.name + " · " + dateDe(b.date) + " · " + b.age_class; });
+      function (d) { return d.group + " · " + d.taxon + " · " + dateDe(d.date) + " · " + fmtDe(d.value) + " ng/g (Σ 6 iPCB)"; });
+    var ringMap = pointMap($("map-ringing"), birds, function (d) { return d.place || ""; },
+      function (b) { return birdCard(b, true); });
+    var labels = ringLabels(ringMap, $("ring-list"));
+    var btn = $("btn-rings"), on = false;
+    labels.show(false);
+    btn.addEventListener("click", function () {
+      on = !on;
+      labels.show(on);
+      ringMap.map.closePopup();
+      btn.textContent = on ? "Ringe ausblenden" : "Alle Vogelringe einblenden";
+      btn.setAttribute("aria-pressed", on);
+    });
   }
 
   function withSeason(d) { return Object.assign({ saison: d.season + " " + d.year }, d); }
@@ -297,7 +422,7 @@
 
   $("notes").innerHTML = (D.notes || []).map(function (n) { return "<li>" + n + "</li>"; }).join("");
 
-  function drawAll() { drawEggs(); drawChain(); drawProfile(); drawTransects(); drawSeasons(); }
+  function drawAll() { drawEggCharts(); drawChain($("chart-chain"), IPCB); drawChain($("chart-chain-dl"), DLPCB); drawProfile(); drawTransects(); drawSeasons(); }
   drawAll();
   drawMaps();
   var t;

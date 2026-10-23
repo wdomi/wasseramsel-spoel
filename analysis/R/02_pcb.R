@@ -51,6 +51,8 @@ pcb_show <- pcb |>
     lat, lon,
     value = round(sum_6_ipcb_fat, 1),          # Summe 6 iPCB, ng/g Fett
     factor = round(sum_6_ipcb_fat / limit_chicken_egg),
+    dl = signif(sum_12_dlpcb_fat, 3),             # Summe 12 dl-PCB, ng/g Fett
+    teq = signif(teq_fat_weight_ng_g, 3),
     unit_uncertain, poor_recovery
   ) |>
   arrange(group_order, river, date)
