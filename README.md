@@ -41,7 +41,8 @@ verschlüsselt im Repository (`assets/cinclus-vault.json`, AES-GCM, Schlüssel p
 und wird erst im Browser nach Eingabe des Stichworts entschlüsselt. Das schützt den Inhalt, solange das
 Stichwort geheim bleibt; die Seite selbst (Formular) ist aber öffentlich erreichbar.
 
-Inhalt ändern: HTML lokal schreiben (z. B. `hidden-src/inhalt.html`, nicht committen) und
+Der Inhalt (PCB-Auswertung und Beringungen) wird mit R aus der Cinclopedia-Datenbank gebaut, siehe
+[`analysis/README.md`](analysis/README.md). Von Hand geht es auch: HTML lokal schreiben (z. B. `hidden-src/inhalt.html`, nicht committen) und
 
 ```sh
 python3 tools/encrypt_hidden.py hidden-src/inhalt.html

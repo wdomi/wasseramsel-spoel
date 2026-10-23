@@ -1,3 +1,7 @@
 /.quarto/
 /_site/
 /hidden-src/
+/analysis/data-raw/
+/analysis/.Renviron
+/analysis/.Rproj.user/
+.Rhistory

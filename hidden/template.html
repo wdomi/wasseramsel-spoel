@@ -1,0 +1,56 @@
+<!-- Vorlage der versteckten Seite (cinclus.qmd). Enthält Layout und Texte, aber keine Daten.
+     Die Daten setzt analysis/R/04_build_page.R an der Stelle __DATA__ ein. -->
+<div class="cinclus">
+  <p class="cinclus-stamp">Entwurf · Datenstand <span data-bind="generated"></span> · Quelle: Cinclopedia</p>
+
+  <h2>Probenahmestellen</h2>
+  <p>Wo die Proben für die PCB-Analysen gesammelt wurden. Kreisgrösse = Anzahl Proben am Ort, Klick zeigt
+     Gruppe, Art, Datum und Wert. Blau: Oberer Spöl, orange: Unterer Spöl, grün: Vergleichsgewässer
+     (Rom, Ova dal Fuorn). <span data-bind="no-coords"></span></p>
+  <figure id="map-samples" class="cinclus-map"></figure>
+
+  <h2>PCB in Wasseramsel-Eiern</h2>
+  <p>Summe der 6 Indikator-PCB pro Ei, in ng pro g Fett, nach Lage des Nests entlang des Spöl
+     (km ab Punt dal Gall). Rom liegt an einem anderen Fluss und steht darum rechts für sich.
+     Die Skala ist logarithmisch: jeder Rasterschritt ist das Zehnfache. Die gestrichelte Linie ist der
+     Höchstwert für Hühnereier (40 ng/g Fett).</p>
+  <div class="cinclus-tiles" id="egg-tiles"></div>
+  <div class="cinclus-filter">
+    <label>Jahr <select id="egg-year"></select></label>
+  </div>
+  <figure id="chart-eggs" class="cinclus-chart"></figure>
+
+  <h2>PCB in der Nahrungskette</h2>
+  <p>Gleiche Einheit und Skala wie oben. Makrozoobenthos fasst Bachflohkrebse und Köcherfliegen zusammen,
+     Ufer-Spinnen fassen Wolf- und Radnetzspinnen zusammen. Hohle Punkte: Wert evtl. nicht auf Fett bezogen
+     (siehe offene Punkte unten).</p>
+  <figure id="chart-chain" class="cinclus-chart"></figure>
+  <details>
+    <summary>Tabelle aller PCB-Proben</summary>
+    <div id="table-pcb" class="cinclus-table"></div>
+  </details>
+
+  <h2>Besiedlung: beringte Wasseramseln</h2>
+  <div class="cinclus-tiles" id="ring-tiles"></div>
+  <figure id="map-ringing" class="cinclus-map"></figure>
+  <p class="cinclus-note">Kreisgrösse = Anzahl beringte Vögel am Ort, Klick zeigt die Namen. Blau: Oberer Spöl,
+     orange: Unterer Spöl, grün: Ova dal Fuorn.</p>
+  <h3>Entlang des Spöl</h3>
+  <p>Jeder Punkt ist ein beringter Vogel, eine Zeile pro Saison: links Punt dal Gall (Staumauer),
+     rechts flussabwärts. Die Form zeigt die Altersklasse beim Beringen.</p>
+  <figure id="chart-profile" class="cinclus-chart"></figure>
+  <h3>Beobachtungen pro Transekt und Monat</h3>
+  <p>Alle Einträge: Beringungen, Fänge, Ablesungen beringter Vögel und unberingte Wasseramseln. Je dunkler,
+     desto mehr Beobachtungen; die Zahl ist die Anzahl Einträge. Transekte von oben nach unten flussabwärts,
+     Rom als Vergleich unten. <span data-bind="obs-not-shown"></span></p>
+  <figure id="chart-transects" class="cinclus-chart"></figure>
+  <h3>Beringungen pro Saison</h3>
+  <figure id="chart-seasons" class="cinclus-chart"></figure>
+  <details>
+    <summary>Tabelle aller beringten Vögel</summary>
+    <div id="table-birds" class="cinclus-table"></div>
+  </details>
+
+  <h2>Offene Punkte zu den Daten</h2>
+  <ul id="notes"></ul>
+</div>

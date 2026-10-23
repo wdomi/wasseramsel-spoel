@@ -1,0 +1,32 @@
+.cinclus {
+  --surface-1: #fcfcfb;
+  --text-primary: #0b0b0b;
+  --text-secondary: #52514e;
+  --text-muted: #8a8984;
+  --grid: #e4e3df;
+  --series-1: #2a78d6;  /* Oberer Spöl */
+  --series-2: #eb6834;  /* Unterer Spöl */
+  --series-3: #1baf7a;  /* Vergleichsgewässer (Rom, Ova dal Fuorn) */
+}
+.cinclus-stamp { color: var(--text-secondary); font-size: .85rem; }
+.cinclus h2 { margin-top: 2.5rem; }
+.cinclus-chart { margin: .5rem 0 1.5rem; overflow-x: auto; }
+.cinclus-chart svg { max-width: 100%; height: auto; }
+.cinclus-row { display: flex; align-items: flex-start; gap: 8px; }
+.cinclus-row svg { max-width: none; }
+.cinclus-row > *:first-child { flex: 1 1 auto; min-width: 0; }
+.cinclus-tiles { display: grid; grid-template-columns: repeat(auto-fit, minmax(150px, 1fr)); gap: .75rem; margin: 1rem 0; }
+.cinclus-tile { background: #f2f6f5; border-radius: .6rem; padding: .75rem 1rem; }
+.cinclus-tile .v { font-size: 1.6rem; font-weight: 700; color: var(--text-primary); line-height: 1.2; }
+.cinclus-tile .l { font-size: .85rem; color: var(--text-secondary); }
+.cinclus-tile .k { display: inline-block; width: .7rem; height: .7rem; border-radius: 50%; margin-right: .35rem; }
+.cinclus-filter { margin: .5rem 0; font-size: .9rem; }
+.cinclus-filter select { margin-left: .35rem; }
+.cinclus-map { height: 420px; border-radius: .6rem; overflow: hidden; margin: 1rem 0 .25rem; }
+.cinclus-note { font-size: .85rem; color: var(--text-secondary); }
+.cinclus-table { max-height: 420px; overflow: auto; font-size: .85rem; }
+.cinclus-table table { width: 100%; border-collapse: collapse; }
+.cinclus-table th, .cinclus-table td { padding: .25rem .5rem; border-bottom: 1px solid var(--grid); text-align: left; white-space: nowrap; }
+.cinclus-table td.num { text-align: right; font-variant-numeric: tabular-nums; }
+.cinclus details { margin: 1rem 0; }
+.cinclus details summary { cursor: pointer; color: var(--text-secondary); }

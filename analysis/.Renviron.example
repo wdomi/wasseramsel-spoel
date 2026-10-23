@@ -1,0 +1,4 @@
+# Kopieren nach analysis/.Renviron (wird nicht committet) und R neu starten.
+# Supabase → Projekt «Cinclopedia» → Connect → «Session pooler» → URI (mit Passwort).
+# Am besten mit einem eigenen Nur-Lese-Benutzer statt dem postgres-Konto.
+SUPABASE_DB_URL=postgresql://USER.trnqybgttenjqkdkncij:PASSWORT@aws-0-eu-central-2.pooler.supabase.com:5432/postgres
