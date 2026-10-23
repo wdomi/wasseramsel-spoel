@@ -146,7 +146,7 @@
   yearSel.addEventListener("change", drawEggCharts);
 
   // ---------- PCB: Nahrungskette ----------
-  var GROUPS = ["Makrozoobenthos", "Ufer-Spinnen", "Fischlaich", "Fische", "Wasseramsel-Eier"];
+  var GROUPS = ["Makrozoobenthos", "Ufer-Spinnen", "Fische", "Fischlaich", "Wasseramsel-Eier"];
 
   function drawChain(el, metric) {
     var data = samples.filter(has(metric));

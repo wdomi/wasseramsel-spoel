@@ -12,8 +12,8 @@ groups <- tibble::tribble(
   "inv_gamma",   "Makrozoobenthos",   1,
   "inv_caddis",  "Makrozoobenthos",   1,
   "inv_spiders", "Ufer-Spinnen",      2,
-  "sprawn",      "Fischlaich",        3,
-  "fish",        "Fische",            4,
+  "sprawn",      "Fischlaich",        4,
+  "fish",        "Fische",            3,
   "egg",         "Wasseramsel-Eier",  5
 )
 

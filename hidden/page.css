@@ -47,10 +47,12 @@
 .cinclus-ringlist-birds { display: flex; flex-wrap: wrap; gap: 6px 14px; }
 
 /* Abschnitte: PCB weiss, Beringung creme */
-.cinclus-sec { margin: 2rem -1rem; padding: .5rem 1rem 1.5rem; border-radius: .8rem; }
-.cinclus-sec.pcb { background: #ffffff; border: 1px solid #e6e4dc; }
-.cinclus-sec.ring { background: #f7f1e1; --surface-1: #f7f1e1; }
-.cinclus-sec.ring .cinclus-tile { background: #efe6cf; }
+.cinclus-sec { margin: 2rem 0; padding: .5rem 0 1.5rem; }
+.cinclus-sec.pcb { background: #ffffff; }
+/* Besiedlung: helles Crème über die ganze Fensterbreite (Schatten + clip-path statt Kasten) */
+.cinclus-sec.ring { background: #fcf8ee; --surface-1: #fcf8ee; padding-top: 1.5rem;
+  box-shadow: 0 0 0 100vmax #fcf8ee; clip-path: inset(0 -100vmax); }
+.cinclus-sec.ring .cinclus-tile { background: #f4eddb; }
 .cinclus-sec > h2:first-child { margin-top: 1rem; }
 
 /* Kenngrösse klar kennzeichnen: iPCB dunkelgrün, dl-PCB braun */
@@ -68,3 +70,7 @@
 .cinclus-symbols .item { display: inline-flex; align-items: center; gap: .35rem; }
 .cinclus-symbols .cinclus-marker { width: 20px; height: 20px; }
 .cinclus-label-head { flex-basis: 100%; font-size: .72rem; font-weight: 600; color: var(--text-secondary); border-bottom: 1px solid #ddd; padding-bottom: 1px; }
+/* Umriss-Symbole (z. B. Ei, Laich): Linien unabhängig von der Grösse gut sichtbar */
+.cinclus-marker svg [style*="stroke:"] { stroke-width: 1.6px !important; vector-effect: non-scaling-stroke; }
+/* feine Flächen-Symbole (Fisch, Makrozoobenthos) etwas kräftiger */
+.cinclus-marker svg path:not([style*="stroke:"]) { stroke: currentColor; stroke-width: .7px; vector-effect: non-scaling-stroke; }
