@@ -3,12 +3,13 @@ $primary: #2f5d62;      // Spöl-Grün
 $secondary: #6b4a3a;    // Wasseramsel-Braun
 $link-color: #2f5d62;
 $font-size-root: 17px;
-$navbar-bg: #2f5d62;
+$navbar-bg: #6fa8ad;    // helles Gletscherwasser-Türkis
+$navbar-fg: #ffffff;
 
 /*-- scss:rules --*/
 .hero {
   display: grid;
-  grid-template-columns: 1fr 260px;
+  grid-template-columns: 1fr 220px;
   gap: 1.5rem;
   align-items: center;
   margin: 1rem 0 2rem;
@@ -101,3 +102,28 @@ $navbar-bg: #2f5d62;
 
 .hero-photo img, img.hero-photo { width: 100%; height: auto; border-radius: .6rem; }
 .quarto-figure figcaption { font-size: .85rem; color: #666; margin-top: .3rem; }
+
+/* ---------- Kopfzeile: Fussspuren und auffliegende Wasseramsel ---------- */
+.dipper-trail {
+  order: 3; flex: 1 1 auto; display: flex; align-items: center; gap: 1.2rem;
+  min-width: 0; margin: 0 1.5rem 0 .5rem;
+}
+.dipper-trail .tracks {
+  flex: 1 1 auto; height: 24px; min-width: 0;
+  background-repeat: repeat-x; background-size: auto 100%; background-position: right center;
+}
+@media (min-width: 992px) { .navbar .navbar-collapse { flex-grow: 0; } }
+.dipper-trail .flyoff { flex: 0 0 auto; line-height: 0; cursor: default; }
+.dipper-trail .flyoff img { height: 40px; width: auto; display: block; }
+@media (max-width: 991.98px) {
+  .dipper-trail { flex: 0 0 auto; margin: 0 .25rem; }
+  .dipper-trail .tracks { display: none; }
+  .dipper-trail .flyoff img { height: 30px; }
+}
+
+/* ---------- Geschützte Seite ---------- */
+.vault-form { max-width: 320px; margin: 2rem 0; }
+.vault-form label { font-weight: 600; display: block; margin-bottom: .3rem; }
+.vault-form input { width: 100%; padding: .5rem; border: 1px solid #ccc; border-radius: .4rem; margin-bottom: .6rem; }
+.vault-form button { border: 0; }
+.vault-msg { min-height: 1.2em; color: #8a1f17; margin-top: .5rem; }

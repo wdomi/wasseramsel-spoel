@@ -4,9 +4,11 @@ subtitle: "Un projet d’accompagnement de l’assainissement des PCB dans le Pa
 lang: fr
 ---
 
-![Johann, le premier cincle plongeur bagué sur le Spöl, à la station de mesure de l'OFEV](../assets/johann-watercolour.png){.hero-photo fig-alt="Aquarelle d’un cincle plongeur bagué sur une pierre dans le torrent"}
-
+::: {.hero}
 [Le cincle plongeur – en romanche *Merl da l'Ova* – vit toute l’année le long du Spöl. C’est le seul passereau qui plonge pour chercher des larves d’insectes au fond du torrent. Nous le suivons pendant et après l’assainissement du Spöl pour savoir comment il se porte. **Pour cela, nous avons besoin de vos observations.**]{.lead}
+
+![Johann, le premier cincle plongeur bagué sur le Spöl, à la station de mesure de l'OFEV](../assets/johann-watercolour.png){.hero-photo fig-alt="Aquarelle d’un cincle plongeur bagué sur une pierre dans le torrent"}
+:::
 
 [Vu un cincle ? Signalez-le](observation.qmd){.cta}
 [L’assainissement](#sanierung){.cta .secondary}

@@ -1,0 +1,21 @@
+---
+title: "Cinclus"
+lang: de
+search: false
+include-in-header:
+  text: |
+    <meta name="robots" content="noindex, nofollow">
+---
+
+```{=html}
+<div id="vault" data-src="assets/cinclus-vault.json">
+  <form class="vault-form">
+    <label for="vault-pw">Stichwort</label>
+    <input id="vault-pw" type="password" autocomplete="current-password" autofocus>
+    <button type="submit" class="cta">Öffnen</button>
+    <p class="vault-msg" role="status"></p>
+  </form>
+</div>
+<div id="vault-content"></div>
+<script src="assets/vault.js"></script>
+```

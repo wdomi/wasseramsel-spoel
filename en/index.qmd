@@ -4,9 +4,11 @@ subtitle: "A project accompanying the PCB remediation in the Swiss National Park
 lang: en
 ---
 
-![Johann the first ringed white throated dipper on the Spöl at the BAFU Messstation](../assets/johann-watercolour.png){.hero-photo fig-alt="Watercolour of a colour-ringed dipper on a stone in a stream"}
-
+::: {.hero}
 [The white-throated dipper – *Merl da l'Ova* in Romansh – lives on the Spöl all year round. It is the only songbird that dives for insect larvae on the riverbed. We follow the dippers during and after the remediation of the Spöl to find out how they are doing. **For this we need your sightings.**]{.lead}
+
+![Johann the first ringed white throated dipper on the Spöl at the BAFU Messstation](../assets/johann-watercolour.png){.hero-photo fig-alt="Watercolour of a colour-ringed dipper on a stone in a stream"}
+:::
 
 [Seen a dipper? Report it](report.qmd){.cta}
 [About the remediation](#sanierung){.cta .secondary}
