@@ -101,7 +101,7 @@
     var data = eggs.filter(function (d) { return (!y || String(d.year) === y) && has(metric)(d); });
     var spoel = spread(data.filter(function (d) { return d.river !== "RO" && d.km != null; }), 0.09);
     var rom = data.filter(function (d) { return d.river === "RO"; }).map(function (d, i, a) {
-      return Object.assign({ xr: (i - (a.length - 1) / 2) * 0.35 }, d);
+      return Object.assign({ xr: (i - (a.length - 1) / 2) * 0.3 - 0.35 }, d);   // links, rechts Platz für Ø
     });
     var yScale = { type: "log", domain: logDomain(eggs, metric), label: "↑ " + metric.label, grid: true, tickFormat: fmtV };
     var limitRule = metric.limit ? Plot.ruleY([D.pcb.limit], { stroke: tok("--text-muted"), strokeDasharray: "4,3" }) : null;
@@ -111,6 +111,27 @@
         channels: Object.assign({ km: "km" }, tipPcb.channels),
         tip: { format: { x: false, y: function (v) { return fmtV(v) + " ng/g"; }, fill: false, km: function (v) { return v == null ? "" : v + " km"; } } }
       }));
+    };
+    // Mittelwert je Gewässer (arithmetisch, im gewählten Jahr): Linie über den Bereich der Proben, Zahl in Flussfarbe
+    var meanOf = function (rows, x0, x1) {
+      if (!rows.length) return [];
+      var m = d3.mean(rows, function (d) { return d[metric.field]; });
+      return [{ x1: x0, x2: x1, y: m, k: key(rows[0]), n: rows.length }];
+    };
+    var spoelMeans = ["SP", "US"].flatMap(function (r) {
+      var rows = spoel.filter(function (d) { return d.river === r; });
+      var ext = d3.extent(rows, function (d) { return d.xk; });
+      return meanOf(rows, ext[0] - 0.3, ext[1] + 0.3);
+    });
+    var romMeans = meanOf(rom, -0.95, 0.15);
+    var meanColor = function (m) { return KEY_COLORS[KEYS.indexOf(m.k)]; };
+    var meanLines = function (ms) {
+      return Plot.ruleY(ms, { x1: "x1", x2: "x2", y: "y", stroke: meanColor, strokeWidth: 2, strokeDasharray: "6,3" });
+    };
+    // Zahl neben der Linie, wo keine Punkte liegen (SP rechts, US links, Rom rechts)
+    var meanLabels = function (ms, x, anchor, dx) {
+      return Plot.text(ms, { x: x, y: "y", text: function (m) { return "Ø " + fmtV(m.y); }, fill: meanColor,
+        stroke: tok("--surface-1"), strokeWidth: 3, paintOrder: "stroke", fontWeight: 700, fontSize: 12, textAnchor: anchor, dx: dx });
     };
     var total = width(el), romW = total < 500 ? 80 : 130, mainW = Math.max(200, total - romW - 8);
     var main = Plot.plot(Object.assign({}, common, {
@@ -122,7 +143,10 @@
         limitRule,
         metric.limit ? Plot.text(["Hühnerei-Höchstwert"], { x: 13.5, y: D.pcb.limit, dy: -8, textAnchor: "end", fill: tok("--text-secondary"), fontSize: 11 }) : null,
         Plot.text([{ x: 3, t: "Oberer Spöl" }, { x: 11, t: "Unterer Spöl" }], { x: "x", text: "t", frameAnchor: "top", dy: 10, fill: tok("--text-secondary"), fontWeight: 600 }),
-        dot(spoel, "xk")
+        meanLines(spoelMeans),
+        dot(spoel, "xk"),
+        meanLabels(spoelMeans.filter(function (m) { return m.k === "Oberer Spöl"; }), "x2", "start", 4),
+        meanLabels(spoelMeans.filter(function (m) { return m.k === "Unterer Spöl"; }), "x1", "end", -4)
       ]
     }));
     var side = Plot.plot(Object.assign({}, common, {
@@ -134,7 +158,9 @@
         limitRule,
         Plot.text(["Rom"], { frameAnchor: "top", dy: 10, fill: tok("--text-secondary"), fontWeight: 600 }),
         Plot.frame({ anchor: "left", stroke: tok("--grid") }),
-        dot(rom, "xr")
+        meanLines(romMeans),
+        dot(rom, "xr"),
+        meanLabels(romMeans, function () { return 1; }, "end", 0)
       ]
     }));
     var row = document.createElement("div");
