@@ -1,0 +1,22 @@
+<script>
+// Fussspuren und auffliegende Wasseramsel in der Kopfzeile.
+// Die Wasseramsel ist zugleich der versteckte Link zur geschützten Seite.
+(function () {
+  var brand = document.querySelector(".navbar .navbar-brand");
+  var container = document.querySelector(".navbar .navbar-brand-container");
+  if (!brand || !container) return;
+
+  // Basis der Website aus dem Logo-Link ableiten (funktioniert auch in /en/, /fr/, /it/)
+  var base = new URL(".", brand.href).href;
+
+  var trail = document.createElement("div");
+  trail.className = "dipper-trail";
+  trail.setAttribute("aria-hidden", "true");
+  trail.innerHTML =
+    '<span class="tracks" style="background-image:url(' + base + 'assets/footprints-white.png)"></span>' +
+    '<a class="flyoff" href="' + base + 'cinclus.html" tabindex="-1" title="">' +
+    '<img src="' + base + 'assets/dipper-flying.png" alt=""></a>';
+
+  container.insertAdjacentElement("afterend", trail);
+})();
+</script>

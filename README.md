@@ -33,3 +33,18 @@ quarto preview
 
 Jeder Push auf `main` rendert die Seite mit GitHub Actions und veröffentlicht sie auf GitHub Pages
 (Settings → Pages → Source: **GitHub Actions**).
+
+## Versteckte Seite (`cinclus.qmd`)
+
+Ein Klick auf die auffliegende Wasseramsel in der Kopfzeile öffnet `cinclus.html`. Der Inhalt liegt nur
+verschlüsselt im Repository (`assets/cinclus-vault.json`, AES-GCM, Schlüssel per PBKDF2 aus dem Stichwort)
+und wird erst im Browser nach Eingabe des Stichworts entschlüsselt. Das schützt den Inhalt, solange das
+Stichwort geheim bleibt; die Seite selbst (Formular) ist aber öffentlich erreichbar.
+
+Inhalt ändern: HTML lokal schreiben (z. B. `hidden-src/inhalt.html`, nicht committen) und
+
+```sh
+python3 tools/encrypt_hidden.py hidden-src/inhalt.html
+```
+
+ausführen; danach `assets/cinclus-vault.json` committen.

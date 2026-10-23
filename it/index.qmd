@@ -4,9 +4,11 @@ subtitle: "Un progetto di accompagnamento al risanamento dai PCB nel Parco Nazio
 lang: it
 ---
 
-![Johann, il primo merlo acquaiolo inanellato sullo Spöl, presso la stazione di misurazione dell'UFAM](../assets/johann-watercolour.png){.hero-photo fig-alt="Acquerello di un merlo acquaiolo con anelli colorati su un sasso nel torrente"}
-
+::: {.hero}
 [Il merlo acquaiolo – in romancio *Merl da l'Ova* – vive tutto l’anno lungo lo Spöl. È l’unico uccello canoro che si immerge per cercare larve di insetti sul fondo del torrente. Lo seguiamo durante e dopo il risanamento dello Spöl per capire come sta. **Per questo abbiamo bisogno delle vostre osservazioni.**]{.lead}
+
+![Johann, il primo merlo acquaiolo inanellato sullo Spöl, presso la stazione di misurazione dell'UFAM](../assets/johann-watercolour.png){.hero-photo fig-alt="Acquerello di un merlo acquaiolo con anelli colorati su un sasso nel torrente"}
+:::
 
 [Visto un merlo acquaiolo? Segnalatelo](osservazione.qmd){.cta}
 [Il risanamento](#sanierung){.cta .secondary}
