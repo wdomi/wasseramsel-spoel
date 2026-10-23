@@ -10,7 +10,6 @@ website:
   site-url: https://wdomi.github.io/wasseramsel-spoel/
   page-navigation: false
   navbar:
-    logo: assets/favicon.png
     # Language switch only – each page carries its own links in its language
     right:
       - href: index.qmd
